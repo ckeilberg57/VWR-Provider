@@ -32,10 +32,12 @@
             padding: 10px;
             background-color: #f9f9f9;
             border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .btn {
-            display: inline-block;
-            padding: 10px 20px;
+            padding: 8px 16px;
             background-color: #007bff;
             color: #fff;
             text-decoration: none;
@@ -55,9 +57,6 @@
         <ul class="waiting-list" id="waitingList">
             <!-- Waiting room list will be dynamically populated here -->
         </ul>
-        <div id="joinButtonDiv" style="text-align: center; display: none;">
-            <button id="joinButton" class="btn" onclick="joinNext()">Join Next</button>
-        </div>
     </div>
 
     <script>
@@ -75,31 +74,33 @@
             waitingRoom.forEach(function(patient) {
                 var listItem = document.createElement("li");
                 listItem.textContent = patient.name;
+                var joinButton = document.createElement("button");
+                joinButton.textContent = "Join";
+                joinButton.classList.add("btn");
+                joinButton.onclick = function() {
+                    joinPatient(patient);
+                };
+                listItem.appendChild(joinButton);
                 waitingList.appendChild(listItem);
             });
         }
 
-        // Function to join the next patient in the waiting room
-        function joinNext() {
-            // Simulate joining the next patient (replace with actual logic)
-            alert("Joining the next patient into Pexip VMR...");
+        // Function to join a patient into the Pexip VMR
+        function joinPatient(patient) {
+            // Simulate joining the patient (replace with actual logic)
+            alert("Joining " + patient.name + " into Pexip VMR...");
             // Remove the joined patient from the waiting room
-            waitingRoom.shift();
+            var index = waitingRoom.indexOf(patient);
+            if (index !== -1) {
+                waitingRoom.splice(index, 1);
+            }
             // Repopulate the waiting room list
             populateWaitingList();
-            // Hide the "Join Next" button if the waiting room is empty
-            if (waitingRoom.length === 0) {
-                document.getElementById("joinButtonDiv").style.display = "none";
-            }
         }
 
         // Call the function to populate the waiting room list on page load
         window.onload = function() {
             populateWaitingList();
-            // Show the "Join Next" button if there are patients in the waiting room
-            if (waitingRoom.length > 0) {
-                document.getElementById("joinButtonDiv").style.display = "block";
-            }
         };
     </script>
 </body>
