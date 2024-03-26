@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .waiting-list {
+            list-style: none;
+            padding: 0;
+        }
+        .waiting-list li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Provider Dashboard</h1>
+        <h2>Waiting Room</h2>
+        <ul class="waiting-list" id="waitingList">
+            <!-- Waiting room list will be dynamically populated here -->
+        </ul>
+        <div id="joinButtonDiv" style="text-align: center; display: none;">
+            <button id="joinButton" class="btn" onclick="joinNext()">Join Next</button>
+        </div>
+    </div>
+
+    <script>
+        // Simulated waiting room data (replace with actual data)
+        var waitingRoom = [
+            { id: 1, name: "Patient 1" },
+            { id: 2, name: "Patient 2" },
+            { id: 3, name: "Patient 3" }
+        ];
+
+        // Function to populate the waiting room list
+        function populateWaitingList() {
+            var waitingList = document.getElementById("waitingList");
+            waitingList.innerHTML = '';
+            waitingRoom.forEach(function(patient) {
+                var listItem = document.createElement("li");
+                listItem.textContent = patient.name;
+                waitingList.appendChild(listItem);
+            });
+        }
+
+        // Function to join the next patient in the waiting room
+        function joinNext() {
+            // Simulate joining the next patient (replace with actual logic)
+            alert("Joining the next patient into Pexip VMR...");
+            // Remove the joined patient from the waiting room
+            waitingRoom.shift();
+            // Repopulate the waiting room list
+            populateWaitingList();
+            // Hide the "Join Next" button if the waiting room is empty
+            if (waitingRoom.length === 0) {
+                document.getElementById("joinButtonDiv").style.display = "none";
+            }
+        }
+
+        // Call the function to populate the waiting room list on page load
+        window.onload = function() {
+            populateWaitingList();
+            // Show the "Join Next" button if there are patients in the waiting room
+            if (waitingRoom.length > 0) {
+                document.getElementById("joinButtonDiv").style.display = "block";
+            }
+        };
+    </script>
+</body>
+</html>
