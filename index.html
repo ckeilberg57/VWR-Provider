@@ -20,53 +20,41 @@
             width: 8in;
             margin: 0 auto;
         }
-        .column-container {
-            display: flex;
-            justify-content: space-between;
+        .large-box {
+            background-color: #ddd;
+            border-radius: 10px;
+            padding: 20px;
             margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
-        .column {
-            flex: 1;
-            padding: 0; /* Remove padding to eliminate space around content */
-            margin: 0 10px;
-        }
-
-        .column h2 {
-            text-align: center;
+        #patientImage {
+            width: 100px; /* Adjust size as needed */
+            height: 100px; /* Adjust size as needed */
+            border-radius: 50%;
             margin-bottom: 10px;
-            padding-bottom: 10px;
         }
-
-        .column:first-child h2 {
-            border-bottom: none; /* Remove border bottom for the first column */
+        #patientName {
+            font-size: 24px;
+            margin-bottom: 20px;
         }
-
-        .content-box {
-            border: none; /* Remove border */
-            border-radius: 0; /* Remove border radius */
-            padding: 0; /* Remove padding */
-            margin-top: 0; /* Remove margin top */
-        }
-        .button-container {
-            text-align: center;
-            width: 100%; /* Ensure button container takes full width */
-        }
-        .btn {
-            display: inline-block;
-            width: 100%; 
-            margin-top: 10px;
-            padding: 10px 0;
+        #joinSessionButton {
+            width: 80px; /* Adjust size as needed */
+            height: 80px; /* Adjust size as needed */
             background-color: #007bff;
             color: #fff;
-            text-decoration: none;
             border: none;
-            border-radius: 4px;
+            border-radius: 50%;
+            font-size: 16px;
             cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
         }
-        .btn.green {
-            background-color: #0056b3; /* Change button color to #0056b3 */
-        }
-        .btn:hover {
+        #joinSessionButton:hover {
             background-color: green; /* Change hover color to green */
         }
     </style>
@@ -74,17 +62,10 @@
 <body>
     <h1>Provider Launch Pad</h1>
     <div class="container-wrapper">
-        <div class="column-container">
-            <div class="column">
-                <h2><span class="label">Patient</span></h2>
-                <div class="content-box" id="patientName">Name will be displayed here</div>
-            </div>
-            <div class="column">
-                <h2><span class="label">Session</span></h2>
-                <div class="content-box button-container">
-                    <button onclick="redirectToStoredURL()" class="btn green">Join Session</button>
-                </div>
-            </div>
+        <div class="large-box">
+            <img id="patientImage" src="patient_image.jpg" alt="Patient Image">
+            <div id="patientName">Name will be displayed here</div>
+            <a id="joinSessionButton" href="#" onclick="redirectToStoredURL()">Join Session</a>
         </div>
     </div>
 
