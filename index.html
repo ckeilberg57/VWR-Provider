@@ -63,115 +63,35 @@
     </div>
 
     <script>
-        // Simulated waiting room data (replace with actual data)
-        var waitingRoom = [
-            { id: 1, name: "Patient 1" },
-            { id: 2, name: "Patient 2" },
-            { id: 3, name: "Patient 3" }
-        ];
+        // Function to populate the waiting room list
+        function populateWaitingList() {
+            var waitingList = document.getElementById("waitingList");
+            waitingList.innerHTML = '';
 
-    // Function to populate the waiting room list
-    function populateWaitingList() {
-        var waitingList = document.getElementById("waitingList");
-        waitingList.innerHTML = '';
-    
-        // Retrieve the patient stored in localStorage
-        var storedPatient = localStorage.getItem('storedPatient');
-    
-        // If a patient is stored, check if it's in the waiting room
-        if (storedPatient) {
-            var patientFound = waitingRoom.find(function(patient) {
-                return patient.name === storedPatient;
-            });
-    
-            // If the patient is found in the waiting room, display only that patient
-            if (patientFound) {
+            // Retrieve the patient name from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const patientName = urlParams.get('name');
+
+            if (patientName) {
                 var listItem = document.createElement("li");
-                listItem.textContent = patientFound.name;
+                listItem.textContent = patientName;
                 var joinButton = document.createElement("button");
                 joinButton.textContent = "Join";
-                joinButton.classList.add("btn");
+                joinButton.classList.add("btn", "green");
                 joinButton.onclick = function() {
-                    joinPatient(patientFound, null);
+                    // Retrieve the stored URL from localStorage
+                    const storedURL = localStorage.getItem('tempURL');
+                    // Redirect to the stored URL
+                    window.location.href = storedURL;
                 };
                 listItem.appendChild(joinButton);
                 waitingList.appendChild(listItem);
             } else {
-                // If the patient is not found in the waiting room, display an empty waiting room
+                // Display a message if no patient name is found in the URL
                 var emptyListItem = document.createElement("li");
-                emptyListItem.textContent = "No patients in the waiting room";
+                emptyListItem.textContent = "No patient waiting";
                 waitingList.appendChild(emptyListItem);
             }
-        } else {
-            // If no patient is stored, display an empty waiting room
-            var emptyListItem = document.createElement("li");
-            emptyListItem.textContent = "No patients in the waiting room";
-            waitingList.appendChild(emptyListItem);
-        }
-    }
-    
-    // Listen for changes in local storage and broadcast them to other tabs
-    window.addEventListener('storage', function(event) {
-        // Check if the storedPatient key is set or removed
-        if (event.key === 'storedPatient') {
-            // Repopulate the waiting room list
-            populateWaitingList();
-    
-            // Broadcast the change to other tabs
-            broadcastChange(event.newValue);
-        }
-    });
-    
-    // Function to broadcast changes to other tabs
-    function broadcastChange(patientName) {
-        // Check if Broadcast Channel API is supported
-        if ('BroadcastChannel' in window) {
-            // Create a broadcast channel with a unique name
-            var broadcastChannel = new BroadcastChannel('local_storage_updates');
-    
-            // Send the updated patient name to other tabs
-            broadcastChannel.postMessage(patientName);
-    
-            // Close the channel
-            broadcastChannel.close();
-        }
-    }
-    
-    // Function to handle messages from other tabs
-    function handleStorageChange(event) {
-        // Update local storage if a message is received from another tab
-        if (event.data !== null && event.data !== undefined) {
-            localStorage.setItem('storedPatient', event.data);
-        }
-    }
-    
-    // Listen for messages from other tabs
-    if ('BroadcastChannel' in window) {
-        var broadcastChannel = new BroadcastChannel('local_storage_updates');
-        broadcastChannel.onmessage = handleStorageChange;
-    }
-    // Call the function to populate the waiting room list on page load
-    window.onload = function() {
-        populateWaitingList();
-    };
-
-
-        // Function to join a patient into the Pexip VMR
-        function joinPatient(patient, url) {
-            if (url) {
-                // Simulate joining the patient with the modified URL (replace with actual logic)
-                alert("Joining " + patient.name + " into Pexip VMR with URL: " + url);
-            } else {
-                // Simulate joining the patient with default URL (replace with actual logic)
-                alert("Joining " + patient.name + " into Pexip VMR...");
-            }
-            // Remove the joined patient from the waiting room
-            var index = waitingRoom.indexOf(patient);
-            if (index !== -1) {
-                waitingRoom.splice(index, 1);
-            }
-            // Repopulate the waiting room list
-            populateWaitingList();
         }
 
         // Call the function to populate the waiting room list on page load
