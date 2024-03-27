@@ -90,9 +90,8 @@
                     waitingList.appendChild(listItem);
                 }
             });
-        }
-    
-        if (waitingList.children.length === 0) {
+        } else {
+            // If no URLs in local storage, display default message
             var emptyListItem = document.createElement("li");
             emptyListItem.textContent = "No patients waiting";
             waitingList.appendChild(emptyListItem);
@@ -119,6 +118,7 @@
         checkLocalStorage();
         refreshPage();
     };
+
 
     </script>
 </body>
