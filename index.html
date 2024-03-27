@@ -74,7 +74,7 @@
         if (tempURL) {
             var urlParams = new URLSearchParams(tempURL);
             var patientName = urlParams.get('name');
-    
+            
             if (patientName) {
                 var listItem = document.createElement("li");
                 listItem.textContent = "Patient: " + decodeURIComponent(patientName);
@@ -107,7 +107,6 @@
         populateWaitingList();
         refreshPage();
     };
-
 
     </script>
 </body>
