@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Display Stored URL</title>
+    <title>Provider Launch Pad</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,30 +15,68 @@
         h1 {
             text-align: center;
         }
-        .url-container {
-            text-align: center;
+        .columns {
+            display: flex;
+            justify-content: space-between;
             margin-top: 50px;
         }
-        .url {
-            font-size: 18px;
-            margin-bottom: 20px;
+        .column {
+            flex: 1;
+        }
+        .column h2 {
+            text-align: center;
+        }
+        .button-container {
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            width: 100%; 
+            margin-top: 10px;
+            padding: 10px 0;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn.green {
+            background-color: green; /* Change button color to green */
+        }
+        .btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h1>Stored URL</h1>
-    <div class="url-container">
-        <div class="url" id="storedUrl">Stored URL will be displayed here</div>
-        <button onclick="redirectToStoredURL()">Go to Stored URL</button>
+    <h1>Provider Launch Pad</h1>
+    <div class="columns">
+        <div class="column">
+            <h2>Patient</h2>
+            <div id="patientName">Name will be displayed here</div>
+        </div>
+        <div class="column">
+            <h2>Session</h2>
+            <div class="button-container">
+                <button onclick="redirectToStoredURL()" class="btn green">Go to Stored URL</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        function displayStoredURL() {
+        function displayPatientNameFromURL() {
             const storedURL = localStorage.getItem('tempURL');
             if (storedURL) {
-                document.getElementById('storedUrl').textContent = storedURL;
+                const urlParams = new URLSearchParams(storedURL.split('?')[1]);
+                const patientName = urlParams.get('name');
+                if (patientName) {
+                    document.getElementById('patientName').textContent = patientName;
+                } else {
+                    document.getElementById('patientName').textContent = "Patient name not found in URL";
+                }
             } else {
-                document.getElementById('storedUrl').textContent = "No URL stored.";
+                document.getElementById('patientName').textContent = "No URL stored.";
             }
         }
 
@@ -51,7 +89,7 @@
             }
         }
 
-        window.onload = displayStoredURL;
+        window.onload = displayPatientNameFromURL;
     </script>
 </body>
 </html>
