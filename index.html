@@ -63,44 +63,54 @@
     </div>
 
     <script>
+    // Function to populate the waiting room list
     function populateWaitingList() {
         var waitingList = document.getElementById("waitingList");
         waitingList.innerHTML = '';
     
         // Retrieve the patient name from localStorage
-        var storedURL = localStorage.getItem('tempURL');
-        if (storedURL) {
-            // Extract patient name from the stored URL
-            var urlParams = new URLSearchParams(storedURL);
-            var patientName = urlParams.get('name');
+        var storedURLs = localStorage.getItem('tempURLs');
+        if (storedURLs) {
+            var urls = JSON.parse(storedURLs);
+            urls.forEach(function(url) {
+                var urlParams = new URLSearchParams(url);
+                var patientName = urlParams.get('name');
     
-            if (patientName) {
-                var listItem = document.createElement("li");
-                listItem.textContent = "Patient: " + patientName;
-                var joinButton = document.createElement("button");
-                joinButton.textContent = "Join";
-                joinButton.classList.add("btn", "green");
-                joinButton.onclick = function() {
-                    window.location.href = storedURL;
-                };
-                listItem.appendChild(joinButton);
-                waitingList.appendChild(listItem);
-            } else {
-                var emptyListItem = document.createElement("li");
-                emptyListItem.textContent = "No patient waiting";
-                waitingList.appendChild(emptyListItem);
-            }
-        } else {
+                if (patientName) {
+                    var listItem = document.createElement("li");
+                    listItem.textContent = "Patient: " + patientName;
+                    var joinButton = document.createElement("button");
+                    joinButton.textContent = "Join";
+                    joinButton.classList.add("btn", "green");
+                    joinButton.onclick = function() {
+                        window.location.href = url;
+                    };
+                    listItem.appendChild(joinButton);
+                    waitingList.appendChild(listItem);
+                }
+            });
+        }
+    
+        if (waitingList.children.length === 0) {
             var emptyListItem = document.createElement("li");
-            emptyListItem.textContent = "No patient waiting";
+            emptyListItem.textContent = "No patients waiting";
             waitingList.appendChild(emptyListItem);
         }
+    }
+    
+    // Function to check local storage every 5 seconds
+    function checkLocalStorage() {
+        setInterval(function() {
+            populateWaitingList();
+        }, 5000); // 5000 milliseconds = 5 seconds
     }
     
     // Call the function to populate the waiting room list on page load
     window.onload = function() {
         populateWaitingList();
+        checkLocalStorage();
     };
+
 
     </script>
 </body>
