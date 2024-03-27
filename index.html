@@ -88,51 +88,31 @@
 
     <script>
         function displayPatientNameFromURL() {
-            const storedURL = localStorage.getItem('tempURL');
-            if (storedURL) {
-                const urlParams = new URLSearchParams(storedURL.split('?')[1]);
-                const patientName = urlParams.get('name');
-                if (patientName) {
-                    const patientNames = document.querySelectorAll('.patient-name');
-                    patientNames.forEach(function(patient) {
+            for (let i = 0; i < 4; i++) {
+                const storedURL = localStorage.getItem('tempURL' + i);
+                const joinButton = document.querySelectorAll('.join-session-button')[i];
+                if (storedURL) {
+                    const urlParams = new URLSearchParams(storedURL.split('?')[1]);
+                    const patientName = urlParams.get('name');
+                    if (patientName) {
+                        const patient = document.querySelectorAll('.patient-name')[i];
                         patient.textContent = patientName;
-                    });
-                } else {
-                    const patientNames = document.querySelectorAll('.patient-name');
-                    patientNames.forEach(function(patient) {
-                        patient.textContent = "Patient name not found in URL";
-                    });
-                }
-
-                for (let i = 0; i < 4; i++) {
-                    const storedURL = localStorage.getItem('tempURL' + i);
-                    const joinButton = document.querySelectorAll('.join-session-button')[i];
-                    if (storedURL) {
-                        joinButton.href = storedURL;
-                        joinButton.style.backgroundColor = 'green';
                     } else {
-                        joinButton.href = '#';
-                        joinButton.style.backgroundColor = 'grey';
+                        const patient = document.querySelectorAll('.patient-name')[i];
+                        patient.textContent = "Patient name not found in URL";
                     }
-                }
-            } else {
-                const patientNames = document.querySelectorAll('.patient-name');
-                patientNames.forEach(function(patient) {
+                    joinButton.href = storedURL;
+                    joinButton.style.backgroundColor = 'green';
+                } else {
+                    const patient = document.querySelectorAll('.patient-name')[i];
                     patient.textContent = "Open Slot";
-                });
+                    joinButton.href = '#';
+                    joinButton.style.backgroundColor = 'grey';
+                    joinButton.removeAttribute('onclick'); // Remove the onclick attribute
+                }
             }
         }
 
-        function redirectToStoredURL(index) {
-            const storedURL = localStorage.getItem('tempURL' + index);
-            if (storedURL) {
-                window.open(storedURL, '_blank');
-            } else {
-                alert("No URL stored.");
-            }
-        }
-
-        window.onload = displayPatientNameFromURL;
     </script>
 </body>
 </html>
