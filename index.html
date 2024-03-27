@@ -70,35 +70,45 @@
             { id: 3, name: "Patient 3" }
         ];
 
-        // Function to populate the waiting room list
-        function populateWaitingList() {
-            var waitingList = document.getElementById("waitingList");
-            waitingList.innerHTML = '';
-            waitingRoom.forEach(function(patient) {
+    function populateWaitingList() {
+        var waitingList = document.getElementById("waitingList");
+        waitingList.innerHTML = '';
+    
+        // Retrieve the patient stored in localStorage
+        var storedPatient = localStorage.getItem('storedPatient');
+    
+        // If a patient is stored, check if it's in the waiting room
+        if (storedPatient) {
+            var patientFound = waitingRoom.find(function(patient) {
+                return patient.name === storedPatient;
+            });
+    
+            // If the patient is found in the waiting room, display only that patient
+            if (patientFound) {
                 var listItem = document.createElement("li");
-                listItem.textContent = patient.name;
+                listItem.textContent = patientFound.name;
                 var joinButton = document.createElement("button");
                 joinButton.textContent = "Join";
                 joinButton.classList.add("btn");
-                if (patient.id === 1) {
-                    // Retrieve tempURL from localStorage
-                    var tempURL = localStorage.getItem('tempURL');
-                    // Modify the URL and replace role=guest with role=host
-                    var modifiedURL = tempURL.replace('role=guest', 'role=host');
-                    joinButton.onclick = function() {
-                        joinPatient(patient, modifiedURL);
-                    };
-                    // Change button color to green
-                    joinButton.classList.add("green");
-                } else {
-                    joinButton.onclick = function() {
-                        joinPatient(patient, null);
-                    };
-                }
+                joinButton.onclick = function() {
+                    joinPatient(patientFound, null);
+                };
                 listItem.appendChild(joinButton);
                 waitingList.appendChild(listItem);
-            });
+            } else {
+                // If the patient is not found in the waiting room, display an empty waiting room
+                var emptyListItem = document.createElement("li");
+                emptyListItem.textContent = "No patients in the waiting room";
+                waitingList.appendChild(emptyListItem);
+            }
+        } else {
+            // If no patient is stored, display an empty waiting room
+            var emptyListItem = document.createElement("li");
+            emptyListItem.textContent = "No patients in the waiting room";
+            waitingList.appendChild(emptyListItem);
         }
+    }
+
 
         // Function to join a patient into the Pexip VMR
         function joinPatient(patient, url) {
