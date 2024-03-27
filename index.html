@@ -87,32 +87,31 @@
     </div>
 
     <script>
-        function displayPatientNameFromURL() {
-            for (let i = 0; i < 4; i++) {
-                const storedURL = localStorage.getItem('tempURL' + i);
-                const joinButton = document.querySelectorAll('.join-session-button')[i];
-                if (storedURL) {
-                    const urlParams = new URLSearchParams(storedURL.split('?')[1]);
-                    const patientName = urlParams.get('name');
-                    if (patientName) {
-                        const patient = document.querySelectorAll('.patient-name')[i];
-                        patient.textContent = patientName;
-                    } else {
-                        const patient = document.querySelectorAll('.patient-name')[i];
-                        patient.textContent = "Patient name not found in URL";
-                    }
-                    joinButton.href = storedURL;
-                    joinButton.style.backgroundColor = 'green';
+    function displayPatientNameFromURL() {
+        for (let i = 0; i < 4; i++) {
+            const storedURL = localStorage.getItem('tempURL' + i);
+            const joinButton = document.querySelectorAll('.join-session-button')[i];
+            if (storedURL) {
+                const urlParams = new URLSearchParams(new URL(storedURL).search);
+                const patientName = urlParams.get('name');
+                const patient = document.querySelectorAll('.patient-name')[i];
+                if (patientName) {
+                    patient.textContent = patientName;
                 } else {
-                    const patient = document.querySelectorAll('.patient-name')[i];
-                    patient.textContent = "Open Slot";
-                    joinButton.href = '#';
-                    joinButton.style.backgroundColor = 'grey';
-                    joinButton.removeAttribute('onclick'); // Remove the onclick attribute
+                    patient.textContent = "Patient name not found in URL";
                 }
+                joinButton.href = storedURL;
+                joinButton.style.backgroundColor = 'green';
+            } else {
+                const patient = document.querySelectorAll('.patient-name')[i];
+                patient.textContent = "Open Slot";
+                joinButton.href = '#';
+                joinButton.style.backgroundColor = 'grey';
+                joinButton.removeAttribute('onclick'); // Remove the onclick attribute
             }
         }
+    }
+</script>
 
-    </script>
 </body>
 </html>
