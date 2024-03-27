@@ -29,17 +29,20 @@
             align-items: center;
             justify-content: space-between;
         }
-        #patientImage {
+        .large-box:not(:last-child) {
+            margin-bottom: 20px;
+        }
+        .large-box img {
             width: 100px; /* Adjust size as needed */
             height: 100px; /* Adjust size as needed */
             border-radius: 50%;
             margin-right: 20px;
         }
-        #patientName {
+        .large-box .patient-name {
             font-size: 24px;
             margin-right: auto;
         }
-        #joinSessionButton {
+        .large-box .join-session-button {
             width: 80px; /* Adjust size as needed */
             height: 80px; /* Adjust size as needed */
             background-color: #007bff;
@@ -53,7 +56,7 @@
             justify-content: center;
             align-items: center;
         }
-        #joinSessionButton:hover {
+        .large-box .join-session-button:hover {
             background-color: green; /* Change hover color to green */
         }
     </style>
@@ -62,9 +65,24 @@
     <h1>Provider Launch Pad</h1>
     <div class="container-wrapper">
         <div class="large-box">
-            <img id="patientImage" src="patient_image.jpg" alt="Patient Image">
-            <div id="patientName">Name will be displayed here</div>
-            <a id="joinSessionButton" href="#" onclick="redirectToStoredURL()">Join Session</a>
+            <img src="patient_image.jpg" alt="Patient Image">
+            <div class="patient-name">Name will be displayed here</div>
+            <a href="#" class="join-session-button" onclick="redirectToStoredURL()">Join Session</a>
+        </div>
+        <div class="large-box">
+            <img src="patient_image.jpg" alt="Patient Image">
+            <div class="patient-name">Name will be displayed here</div>
+            <a href="#" class="join-session-button" onclick="redirectToStoredURL()">Join Session</a>
+        </div>
+        <div class="large-box">
+            <img src="patient_image.jpg" alt="Patient Image">
+            <div class="patient-name">Name will be displayed here</div>
+            <a href="#" class="join-session-button" onclick="redirectToStoredURL()">Join Session</a>
+        </div>
+        <div class="large-box">
+            <img src="patient_image.jpg" alt="Patient Image">
+            <div class="patient-name">Name will be displayed here</div>
+            <a href="#" class="join-session-button" onclick="redirectToStoredURL()">Join Session</a>
         </div>
     </div>
 
@@ -75,12 +93,21 @@
                 const urlParams = new URLSearchParams(storedURL.split('?')[1]);
                 const patientName = urlParams.get('name');
                 if (patientName) {
-                    document.getElementById('patientName').textContent = patientName;
+                    const patientNames = document.querySelectorAll('.patient-name');
+                    patientNames.forEach(function(patient) {
+                        patient.textContent = patientName;
+                    });
                 } else {
-                    document.getElementById('patientName').textContent = "Patient name not found in URL";
+                    const patientNames = document.querySelectorAll('.patient-name');
+                    patientNames.forEach(function(patient) {
+                        patient.textContent = "Patient name not found in URL";
+                    });
                 }
             } else {
-                document.getElementById('patientName').textContent = "No URL stored.";
+                const patientNames = document.querySelectorAll('.patient-name');
+                patientNames.forEach(function(patient) {
+                    patient.textContent = "No URL stored.";
+                });
             }
         }
 
