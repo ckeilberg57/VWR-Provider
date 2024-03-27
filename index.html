@@ -17,7 +17,7 @@
         }
         .container-wrapper {
             text-align: center;
-            width: 5in;
+            width: 8in;
             margin: 0 auto;
         }
         .column-container {
@@ -30,10 +30,19 @@
             border: 2px solid #ccc;
             border-radius: 8px;
             padding: 20px;
+            margin: 0 10px;
         }
         .column h2 {
             text-align: center;
             margin-bottom: 10px;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+        }
+        .content-box {
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
         }
         .button-container {
             text-align: center;
@@ -50,8 +59,8 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .btn.green {
-            background-color: #0056b3;
+        .btn.blue {
+            background-color: #0056b3; /* Change button color to green */
         }
         .btn:hover {
             background-color: green;
@@ -63,13 +72,13 @@
     <div class="container-wrapper">
         <div class="column-container">
             <div class="column">
-                <h2>Patient</h2>
-                <div class="name-box" id="patientName">Name will be displayed here</div>
+                <h2><span class="label">Patient</span></h2>
+                <div class="content-box" id="patientName">Name will be displayed here</div>
             </div>
             <div class="column">
-                <h2>Session</h2>
-                <div class="button-container">
-                    <button onclick="redirectToStoredURL()" class="btn green">Go to Stored URL</button>
+                <h2><span class="label">Session</span></h2>
+                <div class="content-box button-container">
+                    <button onclick="redirectToStoredURL()" class="btn blue">Go to Stored URL</button>
                 </div>
             </div>
         </div>
