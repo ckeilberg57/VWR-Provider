@@ -63,41 +63,45 @@
     </div>
 
     <script>
-        // Function to populate the waiting room list
-        function populateWaitingList() {
-            var waitingList = document.getElementById("waitingList");
-            waitingList.innerHTML = '';
-
-            // Retrieve the patient name from the URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const patientName = urlParams.get('name');
-
+    function populateWaitingList() {
+        var waitingList = document.getElementById("waitingList");
+        waitingList.innerHTML = '';
+    
+        // Retrieve the patient name from localStorage
+        var storedURL = localStorage.getItem('tempURL');
+        if (storedURL) {
+            // Extract patient name from the stored URL
+            var urlParams = new URLSearchParams(storedURL);
+            var patientName = urlParams.get('name');
+    
             if (patientName) {
                 var listItem = document.createElement("li");
-                listItem.textContent = patientName;
+                listItem.textContent = "Patient: " + patientName;
                 var joinButton = document.createElement("button");
                 joinButton.textContent = "Join";
                 joinButton.classList.add("btn", "green");
                 joinButton.onclick = function() {
-                    // Retrieve the stored URL from localStorage
-                    const storedURL = localStorage.getItem('tempURL');
-                    // Redirect to the stored URL
                     window.location.href = storedURL;
                 };
                 listItem.appendChild(joinButton);
                 waitingList.appendChild(listItem);
             } else {
-                // Display a message if no patient name is found in the URL
                 var emptyListItem = document.createElement("li");
                 emptyListItem.textContent = "No patient waiting";
                 waitingList.appendChild(emptyListItem);
             }
+        } else {
+            var emptyListItem = document.createElement("li");
+            emptyListItem.textContent = "No patient waiting";
+            waitingList.appendChild(emptyListItem);
         }
+    }
+    
+    // Call the function to populate the waiting room list on page load
+    window.onload = function() {
+        populateWaitingList();
+    };
 
-        // Call the function to populate the waiting room list on page load
-        window.onload = function() {
-            populateWaitingList();
-        };
     </script>
 </body>
 </html>
