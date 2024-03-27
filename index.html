@@ -20,16 +20,16 @@
             width: 5in;
             margin: 0 auto;
         }
-        .container {
+        .column-container {
             display: flex;
-            flex-direction: column;
-            border: 2px solid #ccc;
-            padding: 20px;
-            border-radius: 8px;
+            justify-content: space-between;
             margin-top: 20px;
         }
         .column {
-            margin-bottom: 20px;
+            flex: 1;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
         }
         .column h2 {
             text-align: center;
@@ -51,7 +51,7 @@
             cursor: pointer;
         }
         .btn.green {
-            background-color: #0056b3; 
+            background-color: #0056b3;
         }
         .btn:hover {
             background-color: green;
@@ -61,7 +61,7 @@
 <body>
     <h1>Provider Launch Pad</h1>
     <div class="container-wrapper">
-        <div class="container">
+        <div class="column-container">
             <div class="column">
                 <h2>Patient</h2>
                 <div class="name-box" id="patientName">Name will be displayed here</div>
