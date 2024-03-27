@@ -70,6 +70,7 @@
             { id: 3, name: "Patient 3" }
         ];
 
+    // Function to populate the waiting room list
     function populateWaitingList() {
         var waitingList = document.getElementById("waitingList");
         waitingList.innerHTML = '';
@@ -108,7 +109,20 @@
             waitingList.appendChild(emptyListItem);
         }
     }
-
+    
+    // Listen for changes in local storage
+    window.addEventListener('storage', function(event) {
+        // Check if the storedPatient key is set or removed
+        if (event.key === 'storedPatient') {
+            // Repopulate the waiting room list
+            populateWaitingList();
+        }
+    });
+    
+    // Call the function to populate the waiting room list on page load
+    window.onload = function() {
+        populateWaitingList();
+    };
 
         // Function to join a patient into the Pexip VMR
         function joinPatient(patient, url) {
