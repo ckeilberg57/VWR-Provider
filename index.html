@@ -68,41 +68,30 @@
         var waitingList = document.getElementById("waitingList");
         waitingList.innerHTML = '';
     
-        // Retrieve URLs from localStorage
-        var storedURLs = localStorage.getItem('tempURLs');
-        if (storedURLs) {
-            var urls = JSON.parse(storedURLs);
+        // Retrieve URL from tempURL
+        var tempURL = localStorage.getItem('tempURL');
+        if (tempURL) {
+            var urlParams = new URLSearchParams(tempURL);
+            var patientName = urlParams.get('name');
     
-            urls.forEach(function(url) {
-                var urlParams = new URLSearchParams(url);
-                var patientName = urlParams.get('name');
-    
-                if (patientName) {
-                    var listItem = document.createElement("li");
-                    listItem.textContent = "Patient: " + patientName;
-                    var joinButton = document.createElement("button");
-                    joinButton.textContent = "Join";
-                    joinButton.classList.add("btn", "green");
-                    joinButton.onclick = function() {
-                        window.location.href = url;
-                    };
-                    listItem.appendChild(joinButton);
-                    waitingList.appendChild(listItem);
-                }
-            });
+            if (patientName) {
+                var listItem = document.createElement("li");
+                listItem.textContent = "Patient: " + patientName;
+                var joinButton = document.createElement("button");
+                joinButton.textContent = "Join";
+                joinButton.classList.add("btn", "green");
+                joinButton.onclick = function() {
+                    window.location.href = tempURL;
+                };
+                listItem.appendChild(joinButton);
+                waitingList.appendChild(listItem);
+            }
         } else {
-            // If no URLs in local storage, display default message
+            // If no URL in tempURL, display default message
             var emptyListItem = document.createElement("li");
             emptyListItem.textContent = "No patients waiting";
             waitingList.appendChild(emptyListItem);
         }
-    }
-    
-    // Function to check local storage every 5 seconds
-    function checkLocalStorage() {
-        setInterval(function() {
-            populateWaitingList();
-        }, 5000); // 5000 milliseconds = 5 seconds
     }
     
     // Function to refresh the page every 6 seconds
@@ -115,10 +104,8 @@
     // Call the functions on page load
     window.onload = function() {
         populateWaitingList();
-        checkLocalStorage();
         refreshPage();
     };
-
 
     </script>
 </body>
