@@ -110,19 +110,51 @@
         }
     }
     
-    // Listen for changes in local storage
+    // Listen for changes in local storage and broadcast them to other tabs
     window.addEventListener('storage', function(event) {
         // Check if the storedPatient key is set or removed
         if (event.key === 'storedPatient') {
             // Repopulate the waiting room list
             populateWaitingList();
+    
+            // Broadcast the change to other tabs
+            broadcastChange(event.newValue);
         }
     });
     
+    // Function to broadcast changes to other tabs
+    function broadcastChange(patientName) {
+        // Check if Broadcast Channel API is supported
+        if ('BroadcastChannel' in window) {
+            // Create a broadcast channel with a unique name
+            var broadcastChannel = new BroadcastChannel('local_storage_updates');
+    
+            // Send the updated patient name to other tabs
+            broadcastChannel.postMessage(patientName);
+    
+            // Close the channel
+            broadcastChannel.close();
+        }
+    }
+    
+    // Function to handle messages from other tabs
+    function handleStorageChange(event) {
+        // Update local storage if a message is received from another tab
+        if (event.data !== null && event.data !== undefined) {
+            localStorage.setItem('storedPatient', event.data);
+        }
+    }
+    
+    // Listen for messages from other tabs
+    if ('BroadcastChannel' in window) {
+        var broadcastChannel = new BroadcastChannel('local_storage_updates');
+        broadcastChannel.onmessage = handleStorageChange;
+    }
     // Call the function to populate the waiting room list on page load
     window.onload = function() {
         populateWaitingList();
     };
+
 
         // Function to join a patient into the Pexip VMR
         function joinPatient(patient, url) {
