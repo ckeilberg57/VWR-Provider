@@ -107,6 +107,13 @@
         populateWaitingList();
         refreshPage();
     };
+    
+    // Listen for changes in local storage
+    window.addEventListener('storage', function(event) {
+        // Call populateWaitingList() whenever there's a change in local storage
+        populateWaitingList();
+    });
+
 
     </script>
 </body>
