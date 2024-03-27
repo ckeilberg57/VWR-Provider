@@ -86,5 +86,26 @@
         </div>
     </div>
 
+    <script>
+        function redirectToStoredURL(index) {
+            try {
+                const storedURL = localStorage.getItem('tempURL');
+                if (storedURL) {
+                    const urlParams = new URLSearchParams(storedURL);
+                    const name = urlParams.get('name');
+                    const conference = urlParams.get('conference');
+                    const updatedURL = storedURL.replace('role=guest', 'role=host');
+                    const joinSessionButtons = document.querySelectorAll('.join-session-button');
+                    joinSessionButtons[index].href = updatedURL;
+                    const patientNameElements = document.querySelectorAll('.patient-name');
+                    patientNameElements[index].textContent = name;
+                } else {
+                    console.error("No URL found in localStorage");
+                }
+            } catch (error) {
+                console.error("Error redirecting to stored URL:", error);
+            }
+        }
+    </script>
 </body>
 </html>
