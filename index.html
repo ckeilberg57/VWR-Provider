@@ -32,6 +32,12 @@
             padding: 20px;
             margin: 0 10px;
         }
+        .column:first-child {
+            margin-right: 5px; /* Adjust margin to leave space between columns */
+        }
+        .column:last-child {
+            margin-left: 5px; /* Adjust margin to leave space between columns */
+        }
         .column h2 {
             text-align: center;
             margin-bottom: 10px;
@@ -46,6 +52,7 @@
         }
         .button-container {
             text-align: center;
+            width: 100%; /* Ensure button container takes full width */
         }
         .btn {
             display: inline-block;
@@ -59,11 +66,11 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .btn.blue {
-            background-color: #0056b3; /* Change button color to green */
+        .btn.green {
+            background-color: #0056b3; /* Change button color to #0056b3 */
         }
         .btn:hover {
-            background-color: green;
+            background-color: green; /* Change hover color to green */
         }
     </style>
 </head>
@@ -78,7 +85,7 @@
             <div class="column">
                 <h2><span class="label">Session</span></h2>
                 <div class="content-box button-container">
-                    <button onclick="redirectToStoredURL()" class="btn blue">Go to Stored URL</button>
+                    <button onclick="redirectToStoredURL()" class="btn green">Go to Stored URL</button>
                 </div>
             </div>
         </div>
