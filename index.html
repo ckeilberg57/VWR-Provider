@@ -68,10 +68,11 @@
         var waitingList = document.getElementById("waitingList");
         waitingList.innerHTML = '';
     
-        // Retrieve the patient name from localStorage
+        // Retrieve URLs from localStorage
         var storedURLs = localStorage.getItem('tempURLs');
         if (storedURLs) {
             var urls = JSON.parse(storedURLs);
+    
             urls.forEach(function(url) {
                 var urlParams = new URLSearchParams(url);
                 var patientName = urlParams.get('name');
