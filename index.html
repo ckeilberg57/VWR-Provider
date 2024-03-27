@@ -3,119 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Provider Dashboard</title>
+    <title>Display Stored URL</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             background-color: #f4f4f4;
             color: #333;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
             text-align: center;
         }
-        .waiting-list {
-            list-style: none;
-            padding: 0;
+        .url-container {
+            text-align: center;
+            margin-top: 50px;
         }
-        .waiting-list li {
-            margin-bottom: 10px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .btn {
-            padding: 8px 16px;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-        .btn.green {
-            background-color: green;
+        .url {
+            font-size: 18px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Provider Dashboard</h1>
-        <h2>Waiting Room</h2>
-        <ul class="waiting-list" id="waitingList">
-            <!-- Waiting room list will be dynamically populated here -->
-        </ul>
+    <h1>Stored URL</h1>
+    <div class="url-container">
+        <div class="url" id="storedUrl">Stored URL will be displayed here</div>
+        <button onclick="redirectToStoredURL()">Go to Stored URL</button>
     </div>
 
     <script>
-    // Function to populate the waiting room list
-    function populateWaitingList() {
-        var waitingList = document.getElementById("waitingList");
-        waitingList.innerHTML = '';
-    
-        // Retrieve URL from tempURL
-        var tempURL = localStorage.getItem('tempURL');
-        console.log("TempURL:", tempURL); // Log tempURL to check if it's retrieved correctly
-        if (tempURL) {
-            var urlParams = new URLSearchParams(tempURL);
-            var patientName = urlParams.get('name');
-            
-            if (patientName) {
-                var listItem = document.createElement("li");
-                listItem.textContent = "Patient: " + decodeURIComponent(patientName);
-                var joinButton = document.createElement("button");
-                joinButton.textContent = "Join";
-                joinButton.classList.add("btn", "green");
-                joinButton.onclick = function() {
-                    window.location.href = tempURL;
-                };
-                listItem.appendChild(joinButton);
-                waitingList.appendChild(listItem);
+        function displayStoredURL() {
+            const storedURL = localStorage.getItem('tempURL');
+            if (storedURL) {
+                document.getElementById('storedUrl').textContent = storedURL;
+            } else {
+                document.getElementById('storedUrl').textContent = "No URL stored.";
             }
-        } else {
-            // If no URL in tempURL, display default message
-            var emptyListItem = document.createElement("li");
-            emptyListItem.textContent = "No patients waiting";
-            waitingList.appendChild(emptyListItem);
         }
-    }
-    
-    // Function to refresh the page every 6 seconds
-    function refreshPage() {
-        setInterval(function() {
-            window.location.reload();
-        }, 6000); // 6000 milliseconds = 6 seconds
-    }
-    
-    // Call the functions on page load
-    window.onload = function() {
-        populateWaitingList();
-        refreshPage();
-    };
-    
-    // Listen for changes in local storage
-    window.addEventListener('storage', function(event) {
-        console.log('Storage event detected:', event);
-        // Call populateWaitingList() whenever there's a change in local storage
-        populateWaitingList();
-    });
 
+        function redirectToStoredURL() {
+            const storedURL = localStorage.getItem('tempURL');
+            if (storedURL) {
+                window.open(storedURL, '_blank');
+            } else {
+                alert("No URL stored.");
+            }
+        }
 
+        window.onload = displayStoredURL;
     </script>
 </body>
 </html>
