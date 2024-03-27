@@ -70,6 +70,7 @@
     
         // Retrieve URL from tempURL
         var tempURL = localStorage.getItem('tempURL');
+        console.log("TempURL:", tempURL); // Log tempURL to check if it's retrieved correctly
         if (tempURL) {
             var urlParams = new URLSearchParams(tempURL);
             var patientName = urlParams.get('name');
@@ -106,6 +107,7 @@
         populateWaitingList();
         refreshPage();
     };
+
 
     </script>
 </body>
