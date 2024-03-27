@@ -27,8 +27,6 @@
         }
         .column {
             flex: 1;
-            border: 2px solid #ccc;
-            border-radius: 8px;
             padding: 20px;
             margin: 0 10px;
         }
@@ -39,6 +37,11 @@
             border-bottom: 2px solid #ccc;
             padding-bottom: 10px;
         }
+
+        .column:first-child h2 {
+            border-bottom: none; /* Remove border bottom for the first column */
+        }
+
         .content-box {
             border: 2px solid #ccc;
             border-radius: 8px;
