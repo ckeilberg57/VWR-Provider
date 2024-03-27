@@ -48,6 +48,9 @@
         .btn:hover {
             background-color: #0056b3;
         }
+        .btn.green {
+            background-color: green;
+        }
     </style>
 </head>
 <body>
@@ -77,18 +80,35 @@
                 var joinButton = document.createElement("button");
                 joinButton.textContent = "Join";
                 joinButton.classList.add("btn");
-                joinButton.onclick = function() {
-                    joinPatient(patient);
-                };
+                if (patient.id === 1) {
+                    // Retrieve tempURL from localStorage
+                    var tempURL = localStorage.getItem('tempURL');
+                    // Modify the URL and replace role=guest with role=host
+                    var modifiedURL = tempURL.replace('role=guest', 'role=host');
+                    joinButton.onclick = function() {
+                        joinPatient(patient, modifiedURL);
+                    };
+                    // Change button color to green
+                    joinButton.classList.add("green");
+                } else {
+                    joinButton.onclick = function() {
+                        joinPatient(patient, null);
+                    };
+                }
                 listItem.appendChild(joinButton);
                 waitingList.appendChild(listItem);
             });
         }
 
         // Function to join a patient into the Pexip VMR
-        function joinPatient(patient) {
-            // Simulate joining the patient (replace with actual logic)
-            alert("Joining " + patient.name + " into Pexip VMR...");
+        function joinPatient(patient, url) {
+            if (url) {
+                // Simulate joining the patient with the modified URL (replace with actual logic)
+                alert("Joining " + patient.name + " into Pexip VMR with URL: " + url);
+            } else {
+                // Simulate joining the patient with default URL (replace with actual logic)
+                alert("Joining " + patient.name + " into Pexip VMR...");
+            }
             // Remove the joined patient from the waiting room
             var index = waitingRoom.indexOf(patient);
             if (index !== -1) {
