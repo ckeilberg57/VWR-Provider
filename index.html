@@ -105,12 +105,19 @@
         }, 5000); // 5000 milliseconds = 5 seconds
     }
     
-    // Call the function to populate the waiting room list on page load
+    // Function to refresh the page every 6 seconds
+    function refreshPage() {
+        setInterval(function() {
+            window.location.reload();
+        }, 6000); // 6000 milliseconds = 6 seconds
+    }
+    
+    // Call the functions on page load
     window.onload = function() {
         populateWaitingList();
         checkLocalStorage();
+        refreshPage();
     };
-
 
     </script>
 </body>
