@@ -45,7 +45,7 @@
         .large-box .join-session-button {
             width: 80px; /* Adjust size as needed */
             height: 80px; /* Adjust size as needed */
-            background-color: #007bff;
+            background-color: grey; /* Default color */
             color: #fff;
             border: none;
             border-radius: 50%;
@@ -67,22 +67,22 @@
         <div class="large-box">
             <img src="images/secureMeeting.png" alt="Patient Image">
             <div class="patient-name">Name will be displayed here</div>
-            <a href="#" class="join-session-button" onclick="redirectToStoredURL()">Join Session</a>
+            <a href="#" class="join-session-button" onclick="redirectToStoredURL(0)">Join Session</a>
         </div>
         <div class="large-box">
             <img src="images/secureMeeting.png" alt="Patient Image">
             <div class="patient-name">Name will be displayed here</div>
-            <a href="#" class="join-session-button" onclick="redirectToStoredURL()">Join Session</a>
+            <a href="#" class="join-session-button" onclick="redirectToStoredURL(1)">Join Session</a>
         </div>
         <div class="large-box">
             <img src="images/secureMeeting.png" alt="Patient Image">
             <div class="patient-name">Name will be displayed here</div>
-            <a href="#" class="join-session-button" onclick="redirectToStoredURL()">Join Session</a>
+            <a href="#" class="join-session-button" onclick="redirectToStoredURL(2)">Join Session</a>
         </div>
         <div class="large-box">
             <img src="images/secureMeeting.png" alt="Patient Image">
             <div class="patient-name">Name will be displayed here</div>
-            <a href="#" class="join-session-button" onclick="redirectToStoredURL()">Join Session</a>
+            <a href="#" class="join-session-button" onclick="redirectToStoredURL(3)">Join Session</a>
         </div>
     </div>
 
@@ -111,8 +111,8 @@
             }
         }
 
-        function redirectToStoredURL() {
-            const storedURL = localStorage.getItem('tempURL');
+        function redirectToStoredURL(index) {
+            const storedURL = localStorage.getItem('tempURL' + index);
             if (storedURL) {
                 window.open(storedURL, '_blank');
             } else {
