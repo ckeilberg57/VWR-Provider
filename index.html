@@ -15,6 +15,12 @@
         h1 {
             text-align: center;
         }
+        .center-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
         .container {
             display: flex;
             justify-content: space-between;
@@ -42,7 +48,7 @@
             cursor: pointer;
         }
         .btn.green {
-            background-color: #0056b3;
+            background-color: #0056b3; 
         }
         .btn:hover {
             background-color: green;
@@ -51,15 +57,17 @@
 </head>
 <body>
     <h1>Provider Launch Pad</h1>
-    <div class="container">
-        <div class="column">
-            <h2>Patient</h2>
-            <div id="patientName">Name will be displayed here</div>
-        </div>
-        <div class="column">
-            <h2>Session</h2>
-            <div class="button-container">
-                <button onclick="redirectToStoredURL()" class="btn green">Go to Stored URL</button>
+    <div class="center-box">
+        <div class="container">
+            <div class="column">
+                <h2>Patient</h2>
+                <div id="patientName">Name will be displayed here</div>
+            </div>
+            <div class="column">
+                <h2>Session</h2>
+                <div class="button-container">
+                    <button onclick="redirectToStoredURL()" class="btn green">Go to Stored URL</button>
+                </div>
             </div>
         </div>
     </div>
