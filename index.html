@@ -88,18 +88,6 @@
 
     <script>
         function displayPatientNameFromURL() {
-            for (let i = 0; i < 4; i++) {
-                const storedURL = localStorage.getItem('tempURL' + i);
-                const joinButton = document.querySelectorAll('.join-session-button')[i];
-                if (storedURL) {
-                    joinButton.href = storedURL;
-                    joinButton.style.backgroundColor = 'green';
-                } else {
-                    joinButton.href = '#';
-                    joinButton.style.backgroundColor = 'grey';
-                }
-            }
-            
             const storedURL = localStorage.getItem('tempURL');
             if (storedURL) {
                 const urlParams = new URLSearchParams(storedURL.split('?')[1]);
@@ -114,6 +102,18 @@
                     patientNames.forEach(function(patient) {
                         patient.textContent = "Patient name not found in URL";
                     });
+                }
+
+                for (let i = 0; i < 4; i++) {
+                    const storedURL = localStorage.getItem('tempURL' + i);
+                    const joinButton = document.querySelectorAll('.join-session-button')[i];
+                    if (storedURL) {
+                        joinButton.href = storedURL;
+                        joinButton.style.backgroundColor = 'green';
+                    } else {
+                        joinButton.href = '#';
+                        joinButton.style.backgroundColor = 'grey';
+                    }
                 }
             } else {
                 const patientNames = document.querySelectorAll('.patient-name');
