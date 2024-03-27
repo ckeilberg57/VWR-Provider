@@ -76,7 +76,7 @@
     
             if (patientName) {
                 var listItem = document.createElement("li");
-                listItem.textContent = "Patient: " + patientName;
+                listItem.textContent = "Patient: " + decodeURIComponent(patientName);
                 var joinButton = document.createElement("button");
                 joinButton.textContent = "Join";
                 joinButton.classList.add("btn", "green");
