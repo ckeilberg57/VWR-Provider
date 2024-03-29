@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Provider Launch Pad</title>
+    <title>Join Session</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,97 +16,105 @@
         h1 {
             text-align: center;
         }
-        .container-wrapper {
+        .name-box {
             text-align: center;
-            width: 8in;
-            margin: 0 auto;
-        }
-        .large-box {
-            background-color: #ddd;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .large-box:not(:last-child) {
             margin-bottom: 20px;
         }
-        .large-box img {
-            width: 100px; /* Adjust size as needed */
-            height: 100px; /* Adjust size as needed */
-            border-radius: 10px; /* Rounded corners */
-            margin-right: 20px;
+        .box {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        .large-box .patient-name {
-            font-size: 24px;
-            margin-right: auto;
-        }
-        .large-box .join-session-button {
-            width: 80px; /* Adjust size as needed */
-            height: 80px; /* Adjust size as needed */
-            background-color: grey; /* Default color */
+        .join-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
             color: #fff;
             border: none;
-            border-radius: 50%;
-            font-size: 16px;
+            border-radius: 4px;
             cursor: pointer;
-            text-decoration: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
-        .large-box .join-session-button:hover {
-            background-color: green; /* Change hover color to green */
+        .join-button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h1>Provider Launch Pad</h1>
-    <div class="container-wrapper">
-        <div class="large-box">
-            <img src="images/secureMeeting.png" alt="Patient Image">
-            <div class="patient-name">Name will be displayed here</div>
-            <a href="#" class="join-session-button" onclick="redirectToStoredURL(0)">Join Session</a>
-        </div>
-        <div class="large-box">
-            <img src="images/secureMeeting.png" alt="Patient Image">
-            <div class="patient-name">Name will be displayed here</div>
-            <a href="#" class="join-session-button" onclick="redirectToStoredURL(1)">Join Session</a>
-        </div>
-        <div class="large-box">
-            <img src="images/secureMeeting.png" alt="Patient Image">
-            <div class="patient-name">Name will be displayed here</div>
-            <a href="#" class="join-session-button" onclick="redirectToStoredURL(2)">Join Session</a>
-        </div>
-        <div class="large-box">
-            <img src="images/secureMeeting.png" alt="Patient Image">
-            <div class="patient-name">Name will be displayed here</div>
-            <a href="#" class="join-session-button" onclick="redirectToStoredURL(3)">Join Session</a>
-        </div>
-    </div>
+    <h1>Join Session</h1>
+    <div id="nameBox" class="name-box"></div>
+    <button id="joinButton" class="join-button" style="display:none;" onclick="joinSession()">Join Session</button>
 
     <script>
-        function redirectToStoredURL(index) {
-            try {
-                const storedURL = localStorage.getItem('tempURL');
-                if (storedURL) {
-                    const urlParams = new URLSearchParams(storedURL);
-                    const name = urlParams.get('name');
-                    const conference = urlParams.get('conference');
-                    const updatedURL = storedURL.replace('role=guest', 'role=host');
-                    const joinSessionButtons = document.querySelectorAll('.join-session-button');
-                    joinSessionButtons[index].href = updatedURL;
-                    const patientNameElements = document.querySelectorAll('.patient-name');
-                    patientNameElements[index].textContent = name;
+        window.onload = function() {
+            // Extract URL from temp storage
+            const tempURL = localStorage.getItem('tempURL');
+
+            if (tempURL) {
+                document.getElementById('joinButton').style.display = 'block';
+
+                // Extract name from the URL
+                const urlParams = new URLSearchParams(tempURL.split('?')[1]);
+                const name = urlParams.get('name');
+
+                // Create box with the extracted name
+                if (name) {
+                    createBoxWithName(name);
                 } else {
-                    console.error("No URL found in localStorage");
+                    console.error('Name not found in URL parameters.');
                 }
-            } catch (error) {
-                console.error("Error redirecting to stored URL:", error);
+            } else {
+                console.error('URL not found in temp storage.');
+            }
+        };
+
+        function createBoxWithName(name) {
+            const nameBox = document.getElementById('nameBox');
+            const box = document.createElement('div');
+            box.className = 'box';
+            box.textContent = name;
+            nameBox.appendChild(box);
+        }
+
+        function joinSession() {
+            // Update URL parameters
+            const tempURL = localStorage.getItem('tempURL');
+
+            if (tempURL) {
+                const urlParams = new URLSearchParams(tempURL.split('?')[1]);
+                urlParams.set('name', 'Demo Provider');
+                urlParams.set('role', 'host');
+                urlParams.delete('join'); // Remove the join parameter
+
+                // Construct updated URL
+                const updatedParams = urlParams.toString();
+                const updatedURL = `https://cklab-edges.ck-collab-engtest.com/webapp3/${window.location.pathname.split('/')[2]}?${updatedParams}`;
+
+                // Clear tempURL
+                localStorage.removeItem('tempURL');
+
+                // Open the updated URL in a new tab
+                window.open(updatedURL, '_blank');
+            } else {
+                console.error('URL not found in temp storage.');
             }
         }
+
+        // Listen for changes in tempURL storage
+        window.addEventListener('storage', function(event) {
+            if (event.key === 'tempURL') {
+                // Handle changes to tempURL
+                // For simplicity, just reload the page to reflect the changes
+                location.reload();
+            }
+        });
+
+        // Refresh the page every 10 seconds
+        setInterval(function() {
+            location.reload();
+        }, 10000);
     </script>
 </body>
 </html>
