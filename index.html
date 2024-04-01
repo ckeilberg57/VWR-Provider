@@ -25,6 +25,8 @@
             background-color: #eee;
             border: 1px solid #ccc;
             border-radius: 4px;
+            width: 6in; /* Initial width of the session info container */
+            max-width: 6in; /* Ensure the width does not exceed 6 inches */
         }
         .session-info {
             display: flex;
@@ -114,11 +116,6 @@
             const nameBox = document.getElementById('nameBox');
             nameBox.textContent = name;
 
-            // Set initial width of session info box
-            const sessionInfo = document.getElementById('sessionInfo');
-            const width = nameBox.offsetWidth + document.getElementById('counterBox').offsetWidth + document.getElementById('joinButton').offsetWidth + 70;
-            sessionInfo.style.width = `${Math.min(width, 6 * 96)}px`; // Convert 6 inches to pixels (96 pixels per inch)
-
             // Start the timer
             let counter = 0;
             clearInterval(timer); // Clear previous interval
@@ -148,8 +145,7 @@
                 // Open the updated URL in a new tab
                 window.open(updatedURL, '_blank');
 
-                // Reset timer and hide session info
-                clearInterval(timer);
+                // Hide session info
                 document.getElementById('sessionInfo').style.display = 'none';
             } else {
                 console.error('URL not found in temp storage.');
