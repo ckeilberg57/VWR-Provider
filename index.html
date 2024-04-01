@@ -79,7 +79,7 @@
             setInterval(checkTempURL, 10000); // Check tempURL every 10 seconds
         };
 
-        let sessions = [];
+        let sessions = JSON.parse(localStorage.getItem('sessions')) || [];
 
         function checkTempURL() {
             // Extract URL from temp storage
@@ -161,6 +161,9 @@
                 const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
                 counterBox.textContent = `Added ${timeString} ago`;
             }, 1000);
+
+            // Save sessions to local storage
+            localStorage.setItem('sessions', JSON.stringify(sessions));
         }
 
         function joinSession(sessionIndex) {
@@ -188,6 +191,9 @@
 
                 // Open the updated URL in a new tab
                 window.open(updatedURL, '_blank');
+
+                // Save sessions to local storage
+                localStorage.setItem('sessions', JSON.stringify(sessions));
             } else {
                 console.error('Session not found.');
             }
