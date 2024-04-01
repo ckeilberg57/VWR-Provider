@@ -85,6 +85,7 @@
 
     <script>
         let timer; // Variable to store the interval ID
+        let startTime; // Variable to store the start time of the session
 
         window.onload = function() {
             checkTempURL();
@@ -118,16 +119,28 @@
             const nameBox = document.getElementById('nameBox');
             nameBox.textContent = name;
 
+            // Set the start time of the session
+            startTime = Date.now();
+
             // Start the timer
-            let startTime = Date.now();
             clearInterval(timer); // Clear previous interval
-            timer = setInterval(function() {
-                const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-                const minutes = Math.floor(elapsedTime / 60);
-                const seconds = elapsedTime % 60;
-                const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-                document.getElementById('counterBox').textContent = `Added ${timeString} ago`;
-            }, 1000);
+            timer = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            // Calculate the elapsed time
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+
+            // Calculate minutes and seconds
+            const minutes = Math.floor(elapsedTime / 60);
+            const seconds = elapsedTime % 60;
+
+            // Format minutes and seconds with leading zeros
+            const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+            const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+
+            // Update the timer display
+            document.getElementById('counterBox').textContent = `Added ${formattedMinutes}:${formattedSeconds} ago`;
         }
 
         function joinSession() {
