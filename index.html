@@ -5,72 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join Session</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .session-info-container {
-            text-align: center;
-            padding: 10px;
-            background-color: #eee;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 6in; /* Initial width of the session info container */
-            max-width: 6in; /* Ensure the width does not exceed 6 inches */
-            display: none; /* Hide the session info container by default */
-        }
-        .session-info {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-        .session-info img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .session-details {
-            flex: 1;
-            text-align: left;
-        }
-        .name {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .counter {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 5px;
-        }
-        .join-button {
-            background-color: green;
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .join-button:hover {
-            background-color: #007d3d;
-        }
+        /* CSS styles */
     </style>
 </head>
 <body>
+    <!-- HTML structure -->
     <h1>Join Session</h1>
     <div class="session-info-container" id="sessionInfoContainer">
         <div id="sessionInfo" class="session-info">
@@ -83,10 +22,8 @@
         </div>
     </div>
 
+    <!-- JavaScript code -->
     <script>
-        let timer; // Variable to store the interval ID
-        let isNewSession = false; // Flag to indicate whether a new session has been created
-
         window.onload = function() {
             checkTempURL();
             setInterval(checkTempURL, 10000); // Check tempURL every 10 seconds
@@ -105,15 +42,12 @@
 
                 // Create session info with the extracted name
                 if (name) {
-                    if (!isNewSession) { // Only create session info if it's not a new session
-                        createSessionInfo(name);
-                    }
+                    createSessionInfo(name);
                 } else {
                     console.error('Name not found in URL parameters.');
                 }
             } else {
                 document.getElementById('sessionInfoContainer').style.display = 'none'; // Hide the session info container
-                clearInterval(timer); // Clear the timer when the session info is hidden
             }
         }
 
@@ -121,20 +55,28 @@
             const nameBox = document.getElementById('nameBox');
             nameBox.textContent = name;
 
-            let startTime = Date.now(); // Initialize startTime
+            let sessionData = JSON.parse(localStorage.getItem('sessionData')) || [];
+            sessionData.push({ name: name, startTime: Date.now() });
+            localStorage.setItem('sessionData', JSON.stringify(sessionData));
 
-            // Reset the flag
-            isNewSession = true;
+            updateCounter();
+        }
 
-            // Start the timer
-            clearInterval(timer); // Clear previous interval
-            timer = setInterval(function () {
-                const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+        function updateCounter() {
+            let sessionData = JSON.parse(localStorage.getItem('sessionData')) || [];
+            const counterBox = document.getElementById('counterBox');
+
+            sessionData.forEach((session, index) => {
+                const elapsedTime = Math.floor((Date.now() - session.startTime) / 1000);
                 const minutes = Math.floor(elapsedTime / 60);
                 const seconds = elapsedTime % 60;
                 const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-                document.getElementById('counterBox').textContent = `Added ${timeString} ago`;
-            }, 1000);
+                const sessionInfo = `Session ${index + 1}: ${session.name} (Added ${timeString} ago)`;
+
+                const sessionElement = document.createElement('div');
+                sessionElement.textContent = sessionInfo;
+                counterBox.appendChild(sessionElement);
+            });
         }
 
         function joinSession() {
@@ -159,10 +101,6 @@
 
                 // Hide session info
                 document.getElementById('sessionInfoContainer').style.display = 'none';
-                clearInterval(timer); // Clear the timer when joining the session
-
-                // Set the flag to indicate a new session is created
-                isNewSession = false;
             } else {
                 console.error('URL not found in temp storage.');
             }
