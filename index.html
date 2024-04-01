@@ -30,8 +30,8 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             margin-bottom: 10px;
-            display: flex; /* Added */
-            align-items: center; /* Added */
+            display: flex;
+            align-items: center;
         }
         .session-info img {
             width: 50px;
@@ -63,7 +63,7 @@
             font-size: 18px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            margin-left: auto; /* Adjusted */
+            margin-left: auto;
         }
         .join-button:hover {
             background-color: #007d3d;
@@ -77,29 +77,34 @@
 
     <script>
         window.onload = function() {
-            checkTempURL();
             setInterval(checkTempURL, 10000); // Check tempURL every 10 seconds
         };
 
         let sessions = JSON.parse(localStorage.getItem('sessions')) || [];
 
         function checkTempURL() {
-            // Extract URL from temp storage
-            const tempURL = localStorage.getItem('tempURL');
+            // Extract URLs from temp storage
+            const tempURLs = Object.values(localStorage);
 
-            if (tempURL) {
+            // Filter out non-session items
+            const sessionURLs = tempURLs.filter(item => item.includes('tempURL'));
+
+            if (sessionURLs.length > 0) {
                 document.getElementById('sessionInfoContainer').style.display = 'block'; // Show the session info container
 
-                // Extract name from the URL
-                const urlParams = new URLSearchParams(tempURL.split('?')[1]);
-                const name = urlParams.get('name');
+                // Loop through each session URL
+                sessionURLs.forEach(url => {
+                    // Extract name from the URL
+                    const urlParams = new URLSearchParams(url.split('?')[1]);
+                    const name = urlParams.get('name');
 
-                // Create session info with the extracted name
-                if (name && !sessions.some(session => session.name === name)) {
-                    createSessionInfo(name, tempURL);
-                } else {
-                    console.error('Name not found in URL parameters or session already exists.');
-                }
+                    // Create session info with the extracted name
+                    if (name && !sessions.some(session => session.name === name)) {
+                        createSessionInfo(name, url);
+                    } else {
+                        console.error('Name not found in URL parameters or session already exists.');
+                    }
+                });
             } else {
                 document.getElementById('sessionInfoContainer').style.display = 'none'; // Hide the session info container
             }
@@ -136,10 +141,7 @@
             joinButton.classList.add('join-button');
             joinButton.textContent = 'Join';
             joinButton.onclick = function() {
-                const sessionIndex = sessions.findIndex(session => session.name === name);
-                if (sessionIndex !== -1) {
-                    joinSession(sessionIndex, sessionInfoBox);
-                }
+                removeSession(sessionInfoBox);
             };
 
             // Append elements
@@ -168,36 +170,18 @@
             localStorage.setItem('sessions', JSON.stringify(sessions));
         }
 
-        function joinSession(sessionIndex, sessionInfoBox) {
-            const session = sessions[sessionIndex];
-            if (session) {
-                // Remove the session from sessions array
-                sessions.splice(sessionIndex, 1);
+        function removeSession(sessionInfoBox) {
+            // Find the index of the session info box to remove
+            const index = Array.from(sessionInfoBox.parentNode.children).indexOf(sessionInfoBox);
 
-                // Remove session info box from UI
-                sessionInfoBox.remove();
+            // Remove the session from the sessions array
+            sessions.splice(index, 1);
 
-                // Update URL parameters
-                const urlParams = new URLSearchParams(session.tempURL.split('?')[1]);
-                urlParams.set('name', 'Demo Provider');
-                urlParams.set('role', 'host');
-                urlParams.delete('join'); // Remove the join parameter
+            // Remove the session info box from the UI
+            sessionInfoBox.remove();
 
-                // Construct updated URL
-                const updatedParams = urlParams.toString();
-                const updatedURL = `https://cklab-edges.ck-collab-engtest.com/webapp3/${window.location.pathname.split('/')[2]}?${updatedParams}`;
-
-                // Clear tempURL
-                localStorage.removeItem('tempURL');
-
-                // Open the updated URL in a new tab
-                window.open(updatedURL, '_blank');
-
-                // Save sessions to local storage
-                localStorage.setItem('sessions', JSON.stringify(sessions));
-            } else {
-                console.error('Session not found.');
-            }
+            // Save sessions to local storage
+            localStorage.setItem('sessions', JSON.stringify(sessions));
         }
     </script>
 </body>
