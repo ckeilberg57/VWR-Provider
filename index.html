@@ -134,9 +134,12 @@
             joinButton.classList.add('join-button');
             joinButton.textContent = 'Join';
             joinButton.onclick = function() {
-                joinSession(name);
+                joinSession(name, tempURL);
                 // Remove this session from sessions array
-                sessions = sessions.filter(session => session.name !== name);
+                const sessionIndex = sessions.findIndex(session => session.name === name);
+                if (sessionIndex !== -1) {
+                    sessions.splice(sessionIndex, 1);
+                }
                 // Remove session info box from UI
                 sessionInfoContainer.removeChild(sessionInfoBox);
             };
@@ -164,29 +167,22 @@
             }, 1000);
         }
 
-        function joinSession(name) {
+        function joinSession(name, tempURL) {
             // Update URL parameters
-            const session = sessions.find(session => session.name === name);
-            const tempURL = session.tempURL;
+            const urlParams = new URLSearchParams(tempURL.split('?')[1]);
+            urlParams.set('name', 'Demo Provider');
+            urlParams.set('role', 'host');
+            urlParams.delete('join'); // Remove the join parameter
 
-            if (tempURL) {
-                const urlParams = new URLSearchParams(tempURL.split('?')[1]);
-                urlParams.set('name', 'Demo Provider');
-                urlParams.set('role', 'host');
-                urlParams.delete('join'); // Remove the join parameter
+            // Construct updated URL
+            const updatedParams = urlParams.toString();
+            const updatedURL = `https://cklab-edges.ck-collab-engtest.com/webapp3/${window.location.pathname.split('/')[2]}?${updatedParams}`;
 
-                // Construct updated URL
-                const updatedParams = urlParams.toString();
-                const updatedURL = `https://cklab-edges.ck-collab-engtest.com/webapp3/${window.location.pathname.split('/')[2]}?${updatedParams}`;
+            // Clear tempURL
+            localStorage.removeItem('tempURL');
 
-                // Clear tempURL
-                localStorage.removeItem('tempURL');
-
-                // Open the updated URL in a new tab
-                window.open(updatedURL, '_blank');
-            } else {
-                console.error('URL not found in temp storage.');
-            }
+            // Open the updated URL in a new tab
+            window.open(updatedURL, '_blank');
         }
     </script>
 </body>
