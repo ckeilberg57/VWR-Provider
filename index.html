@@ -134,7 +134,10 @@
             joinButton.classList.add('join-button');
             joinButton.textContent = 'Join';
             joinButton.onclick = function() {
-                joinSession(name);
+                const sessionIndex = sessions.findIndex(session => session.name === name);
+                if (sessionIndex !== -1) {
+                    joinSession(sessionIndex);
+                }
             };
 
             // Append elements
@@ -148,7 +151,7 @@
             sessionInfoContainer.appendChild(sessionInfoBox);
 
             // Store the session information
-            sessions.push({ name: name, tempURL: tempURL, startTime: Date.now(), sessionInfoBox: sessionInfoBox });
+            sessions.push({ name: name, tempURL: tempURL, startTime: Date.now() });
 
             // Start the timer for this session
             const intervalId = setInterval(function() {
@@ -160,16 +163,15 @@
             }, 1000);
         }
 
-        function joinSession(name) {
-            // Remove the session from sessions array
-            const sessionIndex = sessions.findIndex(session => session.name === name);
-            if (sessionIndex !== -1) {
-                const session = sessions[sessionIndex];
+        function joinSession(sessionIndex) {
+            const session = sessions[sessionIndex];
+            if (session) {
+                // Remove the session from sessions array
                 sessions.splice(sessionIndex, 1);
 
                 // Remove session info box from UI
                 const sessionInfoContainer = document.getElementById('sessionInfoContainer');
-                sessionInfoContainer.removeChild(session.sessionInfoBox);
+                sessionInfoContainer.removeChild(sessionInfoContainer.childNodes[sessionIndex]);
 
                 // Update URL parameters
                 const urlParams = new URLSearchParams(session.tempURL.split('?')[1]);
