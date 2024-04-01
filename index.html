@@ -85,6 +85,7 @@
 
     <script>
         let timer; // Variable to store the interval ID
+        let isNewSession = false; // Flag to indicate whether a new session has been created
 
         window.onload = function() {
             checkTempURL();
@@ -104,7 +105,9 @@
 
                 // Create session info with the extracted name
                 if (name) {
-                    createSessionInfo(name);
+                    if (!isNewSession) { // Only create session info if it's not a new session
+                        createSessionInfo(name);
+                    }
                 } else {
                     console.error('Name not found in URL parameters.');
                 }
@@ -117,9 +120,12 @@
         function createSessionInfo(name) {
             const nameBox = document.getElementById('nameBox');
             nameBox.textContent = name;
-        
+
             let startTime = Date.now(); // Initialize startTime
-        
+
+            // Reset the flag
+            isNewSession = true;
+
             // Start the timer
             clearInterval(timer); // Clear previous interval
             timer = setInterval(function () {
@@ -130,7 +136,7 @@
                 document.getElementById('counterBox').textContent = `Added ${timeString} ago`;
             }, 1000);
         }
- 
+
         function joinSession() {
             // Update URL parameters
             const tempURL = localStorage.getItem('tempURL');
@@ -154,6 +160,9 @@
                 // Hide session info
                 document.getElementById('sessionInfoContainer').style.display = 'none';
                 clearInterval(timer); // Clear the timer when joining the session
+
+                // Set the flag to indicate a new session is created
+                isNewSession = false;
             } else {
                 console.error('URL not found in temp storage.');
             }
