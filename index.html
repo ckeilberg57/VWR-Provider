@@ -12,14 +12,6 @@
     <!-- HTML structure -->
     <h1>Join Session</h1>
     <div class="session-info-container" id="sessionInfoContainer">
-        <div id="sessionInfo" class="session-info">
-            <img src="user.png" alt="User Image">
-            <div class="session-details">
-                <div class="name" id="nameBox"></div>
-                <div class="counter" id="counterBox">Added 00:00 ago</div>
-            </div>
-            <button id="joinButton" class="join-button" onclick="joinSession()">Join</button>
-        </div>
     </div>
 
     <!-- JavaScript code -->
@@ -52,31 +44,48 @@
         }
 
         function createSessionInfo(name) {
-            const nameBox = document.getElementById('nameBox');
+            const sessionInfoContainer = document.getElementById('sessionInfoContainer');
+
+            // Create session info box
+            const sessionInfoBox = document.createElement('div');
+            sessionInfoBox.classList.add('session-info');
+            
+            // Create session image
+            const sessionImage = document.createElement('img');
+            sessionImage.src = "user.png";
+            sessionImage.alt = "User Image";
+            
+            // Create session details
+            const sessionDetails = document.createElement('div');
+            sessionDetails.classList.add('session-details');
+            
+            // Create session name
+            const nameBox = document.createElement('div');
+            nameBox.classList.add('name');
             nameBox.textContent = name;
+            
+            // Create counter
+            const counterBox = document.createElement('div');
+            counterBox.classList.add('counter');
+            counterBox.textContent = 'Added 00:00 ago';
+            
+            // Append elements
+            sessionDetails.appendChild(nameBox);
+            sessionDetails.appendChild(counterBox);
+            sessionInfoBox.appendChild(sessionImage);
+            sessionInfoBox.appendChild(sessionDetails);
+            sessionInfoContainer.appendChild(sessionInfoBox);
 
-            let sessionData = JSON.parse(localStorage.getItem('sessionData')) || [];
-            sessionData.push({ name: name, startTime: Date.now() });
-            localStorage.setItem('sessionData', JSON.stringify(sessionData));
+            let startTime = Date.now(); // Initialize startTime
 
-            updateCounter();
-        }
-
-        function updateCounter() {
-            let sessionData = JSON.parse(localStorage.getItem('sessionData')) || [];
-            const counterBox = document.getElementById('counterBox');
-
-            sessionData.forEach((session, index) => {
-                const elapsedTime = Math.floor((Date.now() - session.startTime) / 1000);
+            // Start the timer for this session
+            setInterval(function() {
+                const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
                 const minutes = Math.floor(elapsedTime / 60);
                 const seconds = elapsedTime % 60;
                 const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-                const sessionInfo = `Session ${index + 1}: ${session.name} (Added ${timeString} ago)`;
-
-                const sessionElement = document.createElement('div');
-                sessionElement.textContent = sessionInfo;
-                counterBox.appendChild(sessionElement);
-            });
+                counterBox.textContent = `Added ${timeString} ago`;
+            }, 1000);
         }
 
         function joinSession() {
