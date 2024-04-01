@@ -172,6 +172,9 @@
             // Find the index of the session info box to remove
             const index = Array.from(sessionInfoBox.parentNode.children).indexOf(sessionInfoBox);
 
+            // Open the URL in a new tab
+            window.open(tempURL, '_blank');
+
             // Remove the session from the sessions array
             sessions.splice(index, 1);
 
@@ -183,9 +186,6 @@
 
             // Remove the session info box from the UI
             sessionInfoBox.remove();
-
-            // Open the URL in a new tab
-            window.open(tempURL, '_blank');
 
             // Save sessions to local storage
             localStorage.setItem('sessions', JSON.stringify(sessions));
