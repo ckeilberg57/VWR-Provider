@@ -184,6 +184,9 @@
             // Remove the session info box from the UI
             sessionInfoBox.remove();
 
+            // Open the URL in a new tab
+            window.open(tempURL, '_blank');
+
             // Save sessions to local storage
             localStorage.setItem('sessions', JSON.stringify(sessions));
         }
