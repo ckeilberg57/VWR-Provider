@@ -134,14 +134,7 @@
             joinButton.classList.add('join-button');
             joinButton.textContent = 'Join';
             joinButton.onclick = function() {
-                joinSession(name, tempURL);
-                // Remove this session from sessions array
-                const sessionIndex = sessions.findIndex(session => session.name === name);
-                if (sessionIndex !== -1) {
-                    sessions.splice(sessionIndex, 1);
-                }
-                // Remove session info box from UI
-                sessionInfoContainer.removeChild(sessionInfoBox);
+                joinSession(name);
             };
 
             // Append elements
@@ -155,7 +148,7 @@
             sessionInfoContainer.appendChild(sessionInfoBox);
 
             // Store the session information
-            sessions.push({ name: name, tempURL: tempURL, startTime: Date.now() });
+            sessions.push({ name: name, tempURL: tempURL, startTime: Date.now(), sessionInfoBox: sessionInfoBox });
 
             // Start the timer for this session
             const intervalId = setInterval(function() {
@@ -167,22 +160,35 @@
             }, 1000);
         }
 
-        function joinSession(name, tempURL) {
-            // Update URL parameters
-            const urlParams = new URLSearchParams(tempURL.split('?')[1]);
-            urlParams.set('name', 'Demo Provider');
-            urlParams.set('role', 'host');
-            urlParams.delete('join'); // Remove the join parameter
+        function joinSession(name) {
+            // Remove the session from sessions array
+            const sessionIndex = sessions.findIndex(session => session.name === name);
+            if (sessionIndex !== -1) {
+                const session = sessions[sessionIndex];
+                sessions.splice(sessionIndex, 1);
 
-            // Construct updated URL
-            const updatedParams = urlParams.toString();
-            const updatedURL = `https://cklab-edges.ck-collab-engtest.com/webapp3/${window.location.pathname.split('/')[2]}?${updatedParams}`;
+                // Remove session info box from UI
+                const sessionInfoContainer = document.getElementById('sessionInfoContainer');
+                sessionInfoContainer.removeChild(session.sessionInfoBox);
 
-            // Clear tempURL
-            localStorage.removeItem('tempURL');
+                // Update URL parameters
+                const urlParams = new URLSearchParams(session.tempURL.split('?')[1]);
+                urlParams.set('name', 'Demo Provider');
+                urlParams.set('role', 'host');
+                urlParams.delete('join'); // Remove the join parameter
 
-            // Open the updated URL in a new tab
-            window.open(updatedURL, '_blank');
+                // Construct updated URL
+                const updatedParams = urlParams.toString();
+                const updatedURL = `https://cklab-edges.ck-collab-engtest.com/webapp3/${window.location.pathname.split('/')[2]}?${updatedParams}`;
+
+                // Clear tempURL
+                localStorage.removeItem('tempURL');
+
+                // Open the updated URL in a new tab
+                window.open(updatedURL, '_blank');
+            } else {
+                console.error('Session not found.');
+            }
         }
     </script>
 </body>
