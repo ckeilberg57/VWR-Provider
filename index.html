@@ -169,29 +169,17 @@
         }
 
         function removeSession(sessionInfoBox, tempURL) {
-            // Find the index of the session info box to remove
-            const index = Array.from(sessionInfoBox.parentNode.children).indexOf(sessionInfoBox);
-
-            // Modify the URL parameters
-            const urlParams = new URLSearchParams(tempURL.split('?')[1]);
-            urlParams.set('name', 'Demo Provider');
-            urlParams.set('role', 'host');
-            urlParams.delete('join');
-
-            // Construct updated URL
-            const updatedParams = urlParams.toString();
-            const updatedURL = `https://cklab-edges.ck-collab-engtest.com/webapp3/${window.location.pathname.split('/')[2]}?${updatedParams}`;
-
-            // Open the updated URL in a new tab
-            window.open(updatedURL, '_blank');
-
-            // Clear all sessions from temp storage
-            Object.keys(localStorage)
-                .filter(key => key.startsWith('tempURL'))
-                .forEach(key => localStorage.removeItem(key));
+            // Find the index of the session in sessions array
+            const sessionIndex = sessions.findIndex(session => session.tempURL === tempURL);
 
             // Remove the session from the sessions array
-            sessions.splice(index, 1);
+            sessions.splice(sessionIndex, 1);
+
+            // Remove the session URL from localStorage
+            const urlKey = Object.keys(localStorage).find(key => localStorage.getItem(key) === tempURL);
+            if (urlKey) {
+                localStorage.removeItem(urlKey);
+            }
 
             // Remove the session info box from the UI
             sessionInfoBox.remove();
