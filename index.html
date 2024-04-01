@@ -130,12 +130,12 @@
         }
 
         function updateTimer() {
-            // Calculate the elapsed time
-            const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+            // Calculate the elapsed time in seconds
+            const elapsedTimeInSeconds = Math.floor((Date.now() - startTime) / 1000);
 
             // Calculate minutes and seconds
-            const minutes = Math.floor(elapsedTime / 60);
-            const seconds = elapsedTime % 60;
+            const minutes = Math.floor(elapsedTimeInSeconds / 60);
+            const seconds = elapsedTimeInSeconds % 60;
 
             // Format minutes and seconds with leading zeros
             const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
