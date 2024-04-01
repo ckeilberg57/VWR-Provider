@@ -54,6 +54,7 @@
         .counter {
             font-size: 12px;
             color: #888;
+            margin-right: 10px;
         }
         .join-button {
             background-color: green;
@@ -78,7 +79,7 @@
             <img src="user.png" alt="User Image">
             <div class="session-details">
                 <div class="name" id="nameBox"></div>
-                <div class="counter" id="counterBox">Added 00:00 ago</div>
+                <div class="counter" id="counterBox">00:00</div>
             </div>
             <button id="joinButton" class="join-button" onclick="joinSession()">Join</button>
         </div>
@@ -90,7 +91,7 @@
 
         window.onload = function() {
             checkTempURL();
-            setInterval(checkTempURL, 10000); // Check tempURL every 10 seconds
+            setInterval(checkTempURL, 1000); // Check tempURL every second
         };
 
         function checkTempURL() {
@@ -141,7 +142,7 @@
             const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
 
             // Update the timer display
-            document.getElementById('counterBox').textContent = `Added ${formattedMinutes}:${formattedSeconds} ago`;
+            document.getElementById('counterBox').textContent = `${formattedMinutes}:${formattedSeconds}`;
         }
 
         function joinSession() {
