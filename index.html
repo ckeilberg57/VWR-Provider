@@ -80,13 +80,13 @@
             setInterval(checkTempURL, 10000); // Check tempURL every 10 seconds
         };
 
-        let previousURL = null;
+        let sessions = [];
 
         function checkTempURL() {
             // Extract URL from temp storage
             const tempURL = localStorage.getItem('tempURL');
 
-            if (tempURL && tempURL !== previousURL) {
+            if (tempURL) {
                 document.getElementById('sessionInfoContainer').style.display = 'block'; // Show the session info container
 
                 // Extract name from the URL
@@ -96,7 +96,6 @@
                 // Create session info with the extracted name
                 if (name) {
                     createSessionInfo(name);
-                    previousURL = tempURL;
                 } else {
                     console.error('Name not found in URL parameters.');
                 }
@@ -108,8 +107,8 @@
         function createSessionInfo(name) {
             const sessionInfoContainer = document.getElementById('sessionInfoContainer');
 
-            // Create session info box if it doesn't exist
-            if (!document.querySelector('.session-info')) {
+            // Check if session already exists
+            if (!sessions.find(session => session.name === name)) {
                 // Create session info box
                 const sessionInfoBox = document.createElement('div');
                 sessionInfoBox.classList.add('session-info');
@@ -137,7 +136,13 @@
                 const joinButton = document.createElement('button');
                 joinButton.classList.add('join-button');
                 joinButton.textContent = 'Join';
-                joinButton.onclick = joinSession;
+                joinButton.onclick = function() {
+                    joinSession(name);
+                    // Remove this session from sessions array
+                    sessions = sessions.filter(session => session.name !== name);
+                    // Remove session info box from UI
+                    sessionInfoContainer.removeChild(sessionInfoBox);
+                };
 
                 // Append elements
                 sessionDetails.appendChild(nameBox);
@@ -150,17 +155,20 @@
                 let startTime = Date.now(); // Initialize startTime
 
                 // Start the timer for this session
-                setInterval(function () {
+                const intervalId = setInterval(function() {
                     const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
                     const minutes = Math.floor(elapsedTime / 60);
                     const seconds = elapsedTime % 60;
                     const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
                     counterBox.textContent = `Added ${timeString} ago`;
                 }, 1000);
+
+                // Store the session information
+                sessions.push({ name: name, startTime: startTime, intervalId: intervalId });
             }
         }
 
-        function joinSession() {
+        function joinSession(name) {
             // Update URL parameters
             const tempURL = localStorage.getItem('tempURL');
 
@@ -179,9 +187,6 @@
 
                 // Open the updated URL in a new tab
                 window.open(updatedURL, '_blank');
-
-                // Hide session info
-                document.getElementById('sessionInfoContainer').style.display = 'none';
             } else {
                 console.error('URL not found in temp storage.');
             }
