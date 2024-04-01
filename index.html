@@ -44,17 +44,15 @@
         .session-details {
             flex: 1;
             text-align: left;
-            display: flex;
-            align-items: center;
         }
         .name {
             font-weight: bold;
-            margin-right: 10px;
+            margin-bottom: 5px;
         }
         .counter {
             font-size: 12px;
             color: #888;
-            margin-right: 10px;
+            margin-bottom: 5px;
         }
         .join-button {
             background-color: green;
@@ -79,7 +77,7 @@
             <img src="user.png" alt="User Image">
             <div class="session-details">
                 <div class="name" id="nameBox"></div>
-                <div class="counter" id="counterBox">00:00</div>
+                <div class="counter" id="counterBox">Added 00:00 ago</div>
             </div>
             <button id="joinButton" class="join-button" onclick="joinSession()">Join</button>
         </div>
@@ -87,11 +85,10 @@
 
     <script>
         let timer; // Variable to store the interval ID
-        let startTime; // Variable to store the start time of the session
 
         window.onload = function() {
             checkTempURL();
-            setInterval(checkTempURL, 1000); // Check tempURL every second
+            setInterval(checkTempURL, 10000); // Check tempURL every 10 seconds
         };
 
         function checkTempURL() {
@@ -121,28 +118,16 @@
             const nameBox = document.getElementById('nameBox');
             nameBox.textContent = name;
 
-            // Set the start time of the session
-            startTime = Date.now();
-
             // Start the timer
+            let startTime = Date.now();
             clearInterval(timer); // Clear previous interval
-            timer = setInterval(updateTimer, 1000);
-        }
-
-        function updateTimer() {
-            // Calculate the elapsed time in seconds
-            const elapsedTimeInSeconds = Math.floor((Date.now() - startTime) / 1000);
-
-            // Calculate minutes and seconds
-            const minutes = Math.floor(elapsedTimeInSeconds / 60);
-            const seconds = elapsedTimeInSeconds % 60;
-
-            // Format minutes and seconds with leading zeros
-            const formattedMinutes = String(minutes).padStart(2, '0');
-            const formattedSeconds = String(seconds).padStart(2, '0');
-
-            // Update the timer display
-            document.getElementById('counterBox').textContent = `${formattedMinutes}:${formattedSeconds}`;
+            timer = setInterval(function() {
+                const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                const minutes = Math.floor(elapsedTime / 60);
+                const seconds = elapsedTime % 60;
+                const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                document.getElementById('counterBox').textContent = `Added ${timeString} ago`;
+            }, 1000);
         }
 
         function joinSession() {
