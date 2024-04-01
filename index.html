@@ -172,8 +172,18 @@
             // Find the index of the session info box to remove
             const index = Array.from(sessionInfoBox.parentNode.children).indexOf(sessionInfoBox);
 
-            // Open the URL in a new tab
-            window.open(tempURL, '_blank');
+            // Modify the URL parameters
+            const urlParams = new URLSearchParams(tempURL.split('?')[1]);
+            urlParams.set('name', 'Demo Provider');
+            urlParams.set('role', 'host');
+            urlParams.delete('join');
+
+            // Construct updated URL
+            const updatedParams = urlParams.toString();
+            const updatedURL = `https://cklab-edges.ck-collab-engtest.com/webapp3/${window.location.pathname.split('/')[2]}?${updatedParams}`;
+
+            // Open the updated URL in a new tab
+            window.open(updatedURL, '_blank');
 
             // Remove the session from the sessions array
             sessions.splice(index, 1);
@@ -193,3 +203,4 @@
     </script>
 </body>
 </html>
+
