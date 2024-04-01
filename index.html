@@ -119,11 +119,14 @@
             nameBox.textContent = name;
 
             // Start the timer
-            let counter = 0;
+            let seconds = 0;
             clearInterval(timer); // Clear previous interval
             timer = setInterval(function() {
-                counter++;
-                document.getElementById('counterBox').textContent = `Added ${counter} seconds ago`;
+                seconds++;
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                const timeString = remainingSeconds < 10 ? `0${remainingSeconds}` : `${remainingSeconds}`;
+                document.getElementById('counterBox').textContent = `Added ${minutes}:${timeString} ago`;
             }, 1000);
         }
 
