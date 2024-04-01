@@ -27,6 +27,7 @@
             border-radius: 4px;
             width: 6in; /* Initial width of the session info container */
             max-width: 6in; /* Ensure the width does not exceed 6 inches */
+            display: none; /* Hide the session info container by default */
         }
         .session-info {
             display: flex;
@@ -71,8 +72,8 @@
 </head>
 <body>
     <h1>Join Session</h1>
-    <div class="session-info-container">
-        <div id="sessionInfo" class="session-info" style="display:none;">
+    <div class="session-info-container" id="sessionInfoContainer">
+        <div id="sessionInfo" class="session-info">
             <img src="user.png" alt="User Image">
             <div class="session-details">
                 <div class="name" id="nameBox"></div>
@@ -95,7 +96,7 @@
             const tempURL = localStorage.getItem('tempURL');
 
             if (tempURL) {
-                document.getElementById('sessionInfo').style.display = 'flex';
+                document.getElementById('sessionInfoContainer').style.display = 'block'; // Show the session info container
 
                 // Extract name from the URL
                 const urlParams = new URLSearchParams(tempURL.split('?')[1]);
@@ -108,7 +109,7 @@
                     console.error('Name not found in URL parameters.');
                 }
             } else {
-                document.getElementById('sessionInfo').style.display = 'none';
+                document.getElementById('sessionInfoContainer').style.display = 'none'; // Hide the session info container
             }
         }
 
@@ -146,7 +147,7 @@
                 window.open(updatedURL, '_blank');
 
                 // Hide session info
-                document.getElementById('sessionInfo').style.display = 'none';
+                document.getElementById('sessionInfoContainer').style.display = 'none';
             } else {
                 console.error('URL not found in temp storage.');
             }
