@@ -84,23 +84,21 @@
 
         function checkTempURL() {
             // Extract URLs from temp storage
-            const tempURLs = Object.values(localStorage);
-
-            // Filter out non-session items
-            const sessionURLs = tempURLs.filter(item => item.includes('tempURL'));
+            const sessionURLs = Object.keys(localStorage).filter(key => key.includes('tempURL'));
 
             if (sessionURLs.length > 0) {
                 document.getElementById('sessionInfoContainer').style.display = 'block'; // Show the session info container
 
                 // Loop through each session URL
-                sessionURLs.forEach(url => {
+                sessionURLs.forEach(urlKey => {
+                    const tempURL = localStorage.getItem(urlKey);
                     // Extract name from the URL
-                    const urlParams = new URLSearchParams(url.split('?')[1]);
+                    const urlParams = new URLSearchParams(tempURL.split('?')[1]);
                     const name = urlParams.get('name');
 
                     // Create session info with the extracted name
                     if (name && !sessions.some(session => session.name === name)) {
-                        createSessionInfo(name, url);
+                        createSessionInfo(name, tempURL);
                     } else {
                         console.error('Name not found in URL parameters or session already exists.');
                     }
@@ -141,7 +139,7 @@
             joinButton.classList.add('join-button');
             joinButton.textContent = 'Join';
             joinButton.onclick = function() {
-                removeSession(sessionInfoBox);
+                removeSession(sessionInfoBox, tempURL);
             };
 
             // Append elements
@@ -170,12 +168,18 @@
             localStorage.setItem('sessions', JSON.stringify(sessions));
         }
 
-        function removeSession(sessionInfoBox) {
+        function removeSession(sessionInfoBox, tempURL) {
             // Find the index of the session info box to remove
             const index = Array.from(sessionInfoBox.parentNode.children).indexOf(sessionInfoBox);
 
             // Remove the session from the sessions array
             sessions.splice(index, 1);
+
+            // Remove the session URL from localStorage
+            const urlKey = Object.keys(localStorage).find(key => localStorage.getItem(key) === tempURL);
+            if (urlKey) {
+                localStorage.removeItem(urlKey);
+            }
 
             // Remove the session info box from the UI
             sessionInfoBox.remove();
