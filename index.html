@@ -117,19 +117,21 @@
         function createSessionInfo(name) {
             const nameBox = document.getElementById('nameBox');
             nameBox.textContent = name;
-
-            // Start the timer
-            let startTime = Date.now();
-            clearInterval(timer); // Clear previous interval
-            timer = setInterval(function() {
-                const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-                const minutes = Math.floor(elapsedTime / 60);
-                const seconds = elapsedTime % 60;
-                const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-                document.getElementById('counterBox').textContent = `Added ${timeString} ago`;
-            }, 1000);
+        
+            let startTime = Date.now(); // Initialize startTime only once
+        
+            // Start the timer if it's not already running
+            if (!timer) {
+                timer = setInterval(function () {
+                    const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                    const minutes = Math.floor(elapsedTime / 60);
+                    const seconds = elapsedTime % 60;
+                    const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                    document.getElementById('counterBox').textContent = `Added ${timeString} ago`;
+                }, 1000);
+            }
         }
-
+        
         function joinSession() {
             // Update URL parameters
             const tempURL = localStorage.getItem('tempURL');
