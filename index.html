@@ -77,7 +77,7 @@
             <img src="user.png" alt="User Image">
             <div class="session-details">
                 <div class="name" id="nameBox"></div>
-                <div class="counter" id="counterBox">Added 0 seconds ago</div>
+                <div class="counter" id="counterBox">Added 00:00 ago</div>
             </div>
             <button id="joinButton" class="join-button" onclick="joinSession()">Join</button>
         </div>
@@ -119,14 +119,14 @@
             nameBox.textContent = name;
 
             // Start the timer
-            let seconds = 0;
+            let startTime = Date.now();
             clearInterval(timer); // Clear previous interval
             timer = setInterval(function() {
-                seconds++;
-                const minutes = Math.floor(seconds / 60);
-                const remainingSeconds = seconds % 60;
-                const timeString = remainingSeconds < 10 ? `0${remainingSeconds}` : `${remainingSeconds}`;
-                document.getElementById('counterBox').textContent = `Added ${minutes}:${timeString} ago`;
+                const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                const minutes = Math.floor(elapsedTime / 60);
+                const seconds = elapsedTime % 60;
+                const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                document.getElementById('counterBox').textContent = `Added ${timeString} ago`;
             }, 1000);
         }
 
