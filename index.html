@@ -93,10 +93,10 @@
                 const name = urlParams.get('name');
 
                 // Create session info with the extracted name
-                if (name) {
+                if (name && !sessions.some(session => session.name === name)) {
                     createSessionInfo(name, tempURL);
                 } else {
-                    console.error('Name not found in URL parameters.');
+                    console.error('Name not found in URL parameters or session already exists.');
                 }
             } else {
                 document.getElementById('sessionInfoContainer').style.display = 'none'; // Hide the session info container
@@ -134,7 +134,7 @@
             joinButton.classList.add('join-button');
             joinButton.textContent = 'Join';
             joinButton.onclick = function() {
-                joinSession(name, tempURL);
+                joinSession(name);
                 // Remove this session from sessions array
                 sessions = sessions.filter(session => session.name !== name);
                 // Remove session info box from UI
@@ -164,22 +164,29 @@
             }, 1000);
         }
 
-        function joinSession(name, tempURL) {
+        function joinSession(name) {
             // Update URL parameters
-            const urlParams = new URLSearchParams(tempURL.split('?')[1]);
-            urlParams.set('name', 'Demo Provider');
-            urlParams.set('role', 'host');
-            urlParams.delete('join'); // Remove the join parameter
+            const session = sessions.find(session => session.name === name);
+            const tempURL = session.tempURL;
 
-            // Construct updated URL
-            const updatedParams = urlParams.toString();
-            const updatedURL = `https://cklab-edges.ck-collab-engtest.com/webapp3/${window.location.pathname.split('/')[2]}?${updatedParams}`;
+            if (tempURL) {
+                const urlParams = new URLSearchParams(tempURL.split('?')[1]);
+                urlParams.set('name', 'Demo Provider');
+                urlParams.set('role', 'host');
+                urlParams.delete('join'); // Remove the join parameter
 
-            // Clear tempURL
-            localStorage.removeItem('tempURL');
+                // Construct updated URL
+                const updatedParams = urlParams.toString();
+                const updatedURL = `https://cklab-edges.ck-collab-engtest.com/webapp3/${window.location.pathname.split('/')[2]}?${updatedParams}`;
 
-            // Open the updated URL in a new tab
-            window.open(updatedURL, '_blank');
+                // Clear tempURL
+                localStorage.removeItem('tempURL');
+
+                // Open the updated URL in a new tab
+                window.open(updatedURL, '_blank');
+            } else {
+                console.error('URL not found in temp storage.');
+            }
         }
     </script>
 </body>
