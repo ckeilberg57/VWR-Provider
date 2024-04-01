@@ -95,7 +95,7 @@
 
                 // Create session info with the extracted name
                 if (name) {
-                    createSessionInfo(name);
+                    createSessionInfo(name, tempURL);
                 } else {
                     console.error('Name not found in URL parameters.');
                 }
@@ -104,7 +104,7 @@
             }
         }
 
-        function createSessionInfo(name) {
+        function createSessionInfo(name, tempURL) {
             const sessionInfoContainer = document.getElementById('sessionInfoContainer');
 
             // Check if session already exists
@@ -150,27 +150,31 @@
                 sessionInfoBox.appendChild(sessionImage);
                 sessionInfoBox.appendChild(sessionDetails);
                 sessionInfoBox.appendChild(joinButton);
+
+                // Append session info box to container
                 sessionInfoContainer.appendChild(sessionInfoBox);
 
-                let startTime = Date.now(); // Initialize startTime
+                // Store the session information
+                sessions.push({ name: name, tempURL: tempURL, startTime: Date.now() });
 
                 // Start the timer for this session
                 const intervalId = setInterval(function() {
-                    const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                    const elapsedTime = Math.floor((Date.now() - sessions.find(session => session.name === name).startTime) / 1000);
                     const minutes = Math.floor(elapsedTime / 60);
                     const seconds = elapsedTime % 60;
                     const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
                     counterBox.textContent = `Added ${timeString} ago`;
                 }, 1000);
 
-                // Store the session information
-                sessions.push({ name: name, startTime: startTime, intervalId: intervalId });
+                // Update URL for this session
+                updateSessionURL(sessionInfoBox, tempURL);
             }
         }
 
         function joinSession(name) {
             // Update URL parameters
-            const tempURL = localStorage.getItem('tempURL');
+            const session = sessions.find(session => session.name === name);
+            const tempURL = session.tempURL;
 
             if (tempURL) {
                 const urlParams = new URLSearchParams(tempURL.split('?')[1]);
@@ -190,6 +194,11 @@
             } else {
                 console.error('URL not found in temp storage.');
             }
+        }
+
+        function updateSessionURL(sessionInfoBox, tempURL) {
+            const joinButton = sessionInfoBox.querySelector('.join-button');
+            joinButton.setAttribute('onclick', `joinSession('${tempURL}')`);
         }
     </script>
 </body>
