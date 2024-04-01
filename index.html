@@ -80,11 +80,13 @@
             setInterval(checkTempURL, 10000); // Check tempURL every 10 seconds
         };
 
+        let previousURL = null;
+
         function checkTempURL() {
             // Extract URL from temp storage
             const tempURL = localStorage.getItem('tempURL');
 
-            if (tempURL) {
+            if (tempURL && tempURL !== previousURL) {
                 document.getElementById('sessionInfoContainer').style.display = 'block'; // Show the session info container
 
                 // Extract name from the URL
@@ -94,6 +96,7 @@
                 // Create session info with the extracted name
                 if (name) {
                     createSessionInfo(name);
+                    previousURL = tempURL;
                 } else {
                     console.error('Name not found in URL parameters.');
                 }
@@ -105,53 +108,56 @@
         function createSessionInfo(name) {
             const sessionInfoContainer = document.getElementById('sessionInfoContainer');
 
-            // Create session info box
-            const sessionInfoBox = document.createElement('div');
-            sessionInfoBox.classList.add('session-info');
-            
-            // Create session image
-            const sessionImage = document.createElement('img');
-            sessionImage.src = "user.png";
-            sessionImage.alt = "User Image";
-            
-            // Create session details
-            const sessionDetails = document.createElement('div');
-            sessionDetails.classList.add('session-details');
-            
-            // Create session name
-            const nameBox = document.createElement('div');
-            nameBox.classList.add('name');
-            nameBox.textContent = name;
-            
-            // Create counter
-            const counterBox = document.createElement('div');
-            counterBox.classList.add('counter');
-            counterBox.textContent = 'Added 00:00 ago';
-            
-            // Create join button
-            const joinButton = document.createElement('button');
-            joinButton.classList.add('join-button');
-            joinButton.textContent = 'Join';
-            joinButton.onclick = joinSession;
-            
-            // Append elements
-            sessionDetails.appendChild(nameBox);
-            sessionDetails.appendChild(counterBox);
-            sessionInfoBox.appendChild(sessionImage);
-            sessionInfoBox.appendChild(sessionDetails);
-            sessionInfoBox.appendChild(joinButton);
-            sessionInfoContainer.appendChild(sessionInfoBox);
+            // Create session info box if it doesn't exist
+            if (!document.querySelector('.session-info')) {
+                // Create session info box
+                const sessionInfoBox = document.createElement('div');
+                sessionInfoBox.classList.add('session-info');
 
-            let startTime = Date.now(); // Initialize startTime
+                // Create session image
+                const sessionImage = document.createElement('img');
+                sessionImage.src = "user.png";
+                sessionImage.alt = "User Image";
 
-            // Start the timer for this session
-            setInterval(function() {
-                const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-                const minutes = Math.floor(elapsedTime / 60);
-                const seconds = elapsedTime % 60;
-                const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-                counterBox.textContent = `Added ${timeString} ago`;
-            }, 1000);
+                // Create session details
+                const sessionDetails = document.createElement('div');
+                sessionDetails.classList.add('session-details');
+
+                // Create session name
+                const nameBox = document.createElement('div');
+                nameBox.classList.add('name');
+                nameBox.textContent = name;
+
+                // Create counter
+                const counterBox = document.createElement('div');
+                counterBox.classList.add('counter');
+                counterBox.textContent = 'Added 00:00 ago';
+
+                // Create join button
+                const joinButton = document.createElement('button');
+                joinButton.classList.add('join-button');
+                joinButton.textContent = 'Join';
+                joinButton.onclick = joinSession;
+
+                // Append elements
+                sessionDetails.appendChild(nameBox);
+                sessionDetails.appendChild(counterBox);
+                sessionInfoBox.appendChild(sessionImage);
+                sessionInfoBox.appendChild(sessionDetails);
+                sessionInfoBox.appendChild(joinButton);
+                sessionInfoContainer.appendChild(sessionInfoBox);
+
+                let startTime = Date.now(); // Initialize startTime
+
+                // Start the timer for this session
+                setInterval(function () {
+                    const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                    const minutes = Math.floor(elapsedTime / 60);
+                    const seconds = elapsedTime % 60;
+                    const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                    counterBox.textContent = `Added ${timeString} ago`;
+                }, 1000);
+            }
         }
 
         function joinSession() {
