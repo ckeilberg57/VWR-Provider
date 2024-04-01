@@ -30,7 +30,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             margin-bottom: 10px;
-            width: 6in;
+            width: 6in; /* Set width to 6 inches */
             display: flex;
             align-items: center;
         }
@@ -118,7 +118,7 @@
 
             // Create session image
             const sessionImage = document.createElement('img');
-            sessionImage.src = "images/secureMeeting.png";
+            sessionImage.src = "user.png";
             sessionImage.alt = "User Image";
 
             // Create session details
@@ -158,11 +158,14 @@
 
             // Start the timer for this session
             const intervalId = setInterval(function() {
-                const elapsedTime = Math.floor((Date.now() - sessions.find(session => session.name === name).startTime) / 1000);
-                const minutes = Math.floor(elapsedTime / 60);
-                const seconds = elapsedTime % 60;
-                const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-                counterBox.textContent = `Added ${timeString} ago`;
+                const session = sessions.find(session => session.name === name);
+                if (session) {
+                    const elapsedTime = Math.floor((Date.now() - session.startTime) / 1000);
+                    const minutes = Math.floor(elapsedTime / 60);
+                    const seconds = elapsedTime % 60;
+                    const timeString = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                    counterBox.textContent = `Added ${timeString} ago`;
+                }
             }, 1000);
 
             // Save sessions to local storage
