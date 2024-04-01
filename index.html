@@ -110,6 +110,7 @@
                 }
             } else {
                 document.getElementById('sessionInfoContainer').style.display = 'none'; // Hide the session info container
+                clearInterval(timer); // Clear the timer when the session info is hidden
             }
         }
 
@@ -148,6 +149,7 @@
 
                 // Hide session info
                 document.getElementById('sessionInfoContainer').style.display = 'none';
+                clearInterval(timer); // Clear the timer when joining the session
             } else {
                 console.error('URL not found in temp storage.');
             }
